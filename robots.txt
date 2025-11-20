@@ -1,0 +1,79 @@
+# robots.txt for https://wailand.ct.ws/
+
+# -------------------------------------------------
+# General rules for all user agents (web crawlers)
+User-agent: *
+# Disallow admin and backend related directories
+Disallow: /admin/
+Disallow: /backend/
+Disallow: /config/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /logs/
+Disallow: /cache/
+
+# Disallow URLs with query parameters that can cause duplicate content
+Disallow: /*?*sessionid=
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+
+# Disallow file types that are not useful for SEO
+Disallow: /*.cgi$
+Disallow: /*.pdf$
+Disallow: /*.doc$
+Disallow: /*.xls$
+Disallow: /*.ppt$
+
+# Allow important assets
+Allow: /assets/
+Allow: /images/
+Allow: /css/
+Allow: /js/
+
+# Block specific bots (example)
+User-agent: BadBot
+Disallow: /
+
+# Block specific bots known for scraping aggressively
+User-agent: SemrushBot
+Disallow: /
+
+# Allow Googlebot full access
+User-agent: Googlebot
+Disallow:
+
+# Allow Bingbot full access
+User-agent: Bingbot
+Disallow:
+
+# Sitemap locations
+Sitemap: https://wailand.ct.ws/sitemap.xml
+
+# Crawl-delay example (some bots respect this)
+User-agent: *
+Crawl-delay: 10
+
+# Prevent crawling of staging or test environments
+User-agent: *
+Disallow: /staging/
+Disallow: /test/
+Disallow: /dev/
+
+# Block indexing of search result pages (common SEO best practice)
+Disallow: /search/
+Disallow: /?s=
+
+# Block access to user profile pages if private
+Disallow: /user/profile/
+Disallow: /account/
+
+# Block login, registration, and password reset pages
+Disallow: /login/
+Disallow: /register/
+Disallow: /password-reset/
+
+# Block specific tracking or analytics scripts if needed
+Disallow: /tracking/
+Disallow: /analytics/
+
+# End of file

@@ -1,0 +1,158 @@
+{
+  "93e37ffa-0c49-4a3d-9e06-f6cb0711ed0d": {
+    "userId": "93e37ffa-0c49-4a3d-9e06-f6cb0711ed0d",
+    "dashboard": {
+      "totalScans": 182,
+      "threatsBlocked": 22,
+      "systemHealth": 94,
+      "activeTools": 4,
+      "securityScore": 80,
+      "uptime": 95.57096828008845,
+      "responseTime": "86.33",
+      "dataProcessed": 578
+    },
+    "tools": [
+      {
+        "id": 1,
+        "name": "Vulnerability Scanner",
+        "description": "Scan your systems for security vulnerabilities and potential threats.",
+        "status": "online",
+        "icon": "fas fa-search",
+        "usage": 95
+      },
+      {
+        "id": 2,
+        "name": "Password Auditor",
+        "description": "Check the strength of your passwords and get recommendations.",
+        "status": "online",
+        "icon": "fas fa-lock",
+        "usage": 79
+      },
+      {
+        "id": 3,
+        "name": "Firewall Manager",
+        "description": "Configure and monitor your firewall settings in real-time.",
+        "status": "online",
+        "icon": "fas fa-shield-alt",
+        "usage": 91
+      },
+      {
+        "id": 4,
+        "name": "Penetration Test",
+        "description": "Simulate cyber attacks to test your system's defenses.",
+        "status": "warning",
+        "icon": "fas fa-bug",
+        "usage": 45
+      }
+    ],
+    "notifications": [
+      {
+        "id": 1,
+        "title": "System security scan completed successfully",
+        "message": "The latest security scan detected no critical threats in your system.",
+        "type": "success",
+        "timestamp": "2025-11-17T14:30:28.460Z",
+        "read": false
+      },
+      {
+        "id": 2,
+        "title": "Welcome to Wailand Security System",
+        "message": "Your account has been successfully activated.",
+        "type": "info",
+        "timestamp": "2025-11-16T16:30:28.460Z",
+        "read": true
+      }
+    ],
+    "profile": {
+      "scans": 159,
+      "tools": 3,
+      "daysActive": 102
+    }
+  },
+  "admin@wailand.com": {
+    "userId": "admin@wailand.com",
+    "dashboard": {
+      "totalScans": 165,
+      "threatsBlocked": 21,
+      "systemHealth": 90,
+      "activeTools": 6,
+      "securityScore": 87,
+      "uptime": 95.55520767506474,
+      "responseTime": "114.25",
+      "dataProcessed": 719
+    },
+    "tools": [
+      {
+        "id": 1,
+        "name": "Vulnerability Scanner",
+        "description": "Scan your systems for security vulnerabilities and potential threats.",
+        "status": "online",
+        "icon": "fas fa-search",
+        "usage": 81
+      },
+      {
+        "id": 2,
+        "name": "Password Auditor",
+        "description": "Check the strength of your passwords and get recommendations.",
+        "status": "online",
+        "icon": "fas fa-lock",
+        "usage": 73
+      },
+      {
+        "id": 3,
+        "name": "Firewall Manager",
+        "description": "Configure and monitor your firewall settings in real-time.",
+        "status": "online",
+        "icon": "fas fa-shield-alt",
+        "usage": 78
+      },
+      {
+        "id": 4,
+        "name": "Penetration Test",
+        "description": "Simulate cyber attacks to test your system's defenses.",
+        "status": "warning",
+        "icon": "fas fa-bug",
+        "usage": 77
+      }
+    ],
+    "notifications": [
+      {
+        "id": 1763398030597,
+        "title": "Security Scan Completed",
+        "message": "Security scan finished. Found and blocked 0 threats.",
+        "type": "success",
+        "timestamp": "2025-11-17T16:47:10.597Z",
+        "read": false
+      },
+      {
+        "id": 1763398023119,
+        "title": "Tool Execution Completed",
+        "message": "Password Auditor has finished running successfully.",
+        "type": "success",
+        "timestamp": "2025-11-17T16:47:03.119Z",
+        "read": false
+      },
+      {
+        "id": 1,
+        "title": "System security scan completed successfully",
+        "message": "The latest security scan detected no critical threats in your system.",
+        "type": "success",
+        "timestamp": "2025-11-17T14:46:07.042Z",
+        "read": false
+      },
+      {
+        "id": 2,
+        "title": "Welcome to Wailand Security System",
+        "message": "Your account has been successfully activated.",
+        "type": "info",
+        "timestamp": "2025-11-16T16:46:07.042Z",
+        "read": true
+      }
+    ],
+    "profile": {
+      "scans": 200,
+      "tools": 2,
+      "daysActive": 56
+    }
+  }
+}

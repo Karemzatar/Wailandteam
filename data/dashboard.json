@@ -1,0 +1,102 @@
+{
+  "totalScans": 245,
+  "threatsBlocked": 32,
+  "systemHealth": 95,
+  "activeTools": 8,
+  "securityScore": 88,
+  "uptime": 99.8,
+  "responseTime": 45.2,
+  "dataProcessed": 1250,
+  "tools": [
+    {
+      "id": 1,
+      "name": "Vulnerability Scanner",
+      "description": "Scan your systems for security vulnerabilities and potential threats.",
+      "status": "online",
+      "icon": "fas fa-search",
+      "usage": 85
+    },
+    {
+      "id": 2,
+      "name": "Password Auditor",
+      "description": "Check the strength of your passwords and get recommendations.",
+      "status": "online",
+      "icon": "fas fa-lock",
+      "usage": 72
+    },
+    {
+      "id": 3,
+      "name": "Firewall Manager",
+      "description": "Configure and monitor your firewall settings in real-time.",
+      "status": "online",
+      "icon": "fas fa-shield-alt",
+      "usage": 92
+    },
+    {
+      "id": 4,
+      "name": "Penetration Test",
+      "description": "Simulate cyber attacks to test your system's defenses.",
+      "status": "warning",
+      "icon": "fas fa-bug",
+      "usage": 55
+    },
+    {
+      "id": 5,
+      "name": "Network Monitor",
+      "description": "Monitor network traffic and detect suspicious activities.",
+      "status": "online",
+      "icon": "fas fa-network-wired",
+      "usage": 78
+    },
+    {
+      "id": 6,
+      "name": "Log Analyzer",
+      "description": "Analyze system logs for security events and anomalies.",
+      "status": "offline",
+      "icon": "fas fa-file-alt",
+      "usage": 45
+    },
+    {
+      "id": 7,
+      "name": "Threat Intelligence",
+      "description": "Get real-time threat intelligence from global sources.",
+      "status": "online",
+      "icon": "fas fa-brain",
+      "usage": 91
+    },
+    {
+      "id": 8,
+      "name": "Compliance Checker",
+      "description": "Ensure your systems meet security compliance standards.",
+      "status": "online",
+      "icon": "fas fa-clipboard-check",
+      "usage": 82
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "title": "System security scan completed successfully",
+      "message": "The latest security scan detected no critical threats in your system.",
+      "type": "success",
+      "timestamp": "2025-11-17T14:07:03.422Z",
+      "read": false
+    },
+    {
+      "id": 2,
+      "title": "New user registered in the system",
+      "message": "A new user has been added to the security management system.",
+      "type": "info",
+      "timestamp": "2025-11-17T11:07:03.422Z",
+      "read": false
+    },
+    {
+      "id": 3,
+      "title": "Firewall rules updated",
+      "message": "The firewall configuration has been successfully updated.",
+      "type": "info",
+      "timestamp": "2025-11-17T08:07:03.422Z",
+      "read": true
+    }
+  ]
+}

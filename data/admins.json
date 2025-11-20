@@ -1,0 +1,9 @@
+[
+  {
+    "email": "admin@wailand.com",
+    "password": "$2b$12$2QpsZ2qeTgAOYUxEGNmroer7LmAXMjjyQlaYrpvsFL3KC0NnyaQmO",
+    "name": "مدير النظام",
+    "role": "admin",
+    "createdAt": "2025-11-17T16:45:37.709Z"
+  }
+]

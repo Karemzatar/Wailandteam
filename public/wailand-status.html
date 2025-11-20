@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wailand - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --bg-dark: #0f0f1a;
+            --bg-darker: #1a1a2e;
+            --bg-card: rgba(25, 25, 45, 0.7);
+            --primary: #7a82ff;
+            --secondary: #3bd1ff;
+            --accent: #ff416c;
+            --text-light: #e6e6ff;
+            --text-lighter: #a0a0d0;
+            --success: #2ed573;
+            --warning: #ffa502;
+            --danger: #ff4757;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(25, 25, 45, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: var(--text-lighter);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            background: rgba(122, 130, 255, 0.1);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logout-btn {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--danger);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 71, 87, 0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .welcome-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-section p {
+            color: var(--text-lighter);
+            font-size: 1.1rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(122, 130, 255, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .card-content {
+            color: var(--text-lighter);
+            line-height: 1.6;
+        }
+
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-lighter);
+        }
+
+        /* Admin Section */
+        .admin-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+        }
+
+        .admin-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .users-table th, .users-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .users-table th {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .admin-badge {
+            background: rgba(122, 130, 255, 0.2);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .user-badge {
+            background: rgba(59, 209, 255, 0.2);
+            color: var(--secondary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .make-admin-btn {
+            background: rgba(122, 130, 255, 0.2);
+            color: var(--primary);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .make-admin-btn:hover {
+            background: rgba(122, 130, 255, 0.3);
+        }
+
+        /* Change Password Section */
+        .change-password-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+        }
+
+        .change-password-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-lighter);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(35, 35, 60, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(122, 130, 255, 0.5);
+        }
+
+        .auth-btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(122, 130, 255, 0.4);
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(122, 130, 255, 0.6);
+        }
+
+        /* Tools Section */
+        .tools-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+        }
+
+        .tools-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .tool-card {
+            background: rgba(35, 35, 60, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(122, 130, 255, 0.3);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .tool-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .tool-desc {
+            color: var(--text-lighter);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .tool-btn {
+            background: rgba(122, 130, 255, 0.2);
+            color: var(--primary);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .tool-btn:hover {
+            background: rgba(122, 130, 255, 0.3);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background: rgba(25, 25, 45, 0.9);
+            border-left: 4px solid var(--primary);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dashboard-card, .admin-section, .change-password-section, .tools-section {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .welcome-section {
+                padding: 30px 20px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .users-table {
+                font-size: 0.9rem;
+            }
+
+            .users-table th, .users-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-shield-alt" style="color: var(--primary); font-size: 1.8rem;"></i>
+            <h1>Wailand</h1>
+        </div>
+        
+        <div class="nav-links">
+            <a href="#" class="nav-link active">Dashboard</a>
+            <a href="#" class="nav-link">Security</a>
+            <a href="#" class="nav-link">Tools</a>
+            <a href="#" class="nav-link">Settings</a>
+        </div>
+        
+        <div class="user-menu">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div>
+                    <div id="userName">User Name</div>
+                    <div id="userRole" style="font-size: 0.8rem; color: var(--text-lighter);">User</div>
+                </div>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h2 id="welcomeMessage">Welcome back, User!</h2>
+            <p>Here's what's happening with your security and tools today.</p>
+        </section>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="card-title">Security Status</h3>
+                </div>
+                <div class="card-content">
+                    <p>Your systems are <strong style="color: var(--success);">secure</strong>. Last scan detected no critical threats.</p>
+                </div>
+                <div class="card-stats">
+                    <div class="stat">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Protected</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Warnings</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3 class="card-title">Active Projects</h3>
+                </div>
+                <div class="card-content">
+                    <p>You have <strong>5 active projects</strong>. 2 are approaching deadlines.</p>
+                </div>
+                <div class="card-stats">
+                    <div class="stat">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">In Progress</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="card-title">AI Tools</h3>
+                </div>
+                <div class="card-content">
+                    <p><strong>3 AI tools</strong> are currently active and monitoring your systems.</p>
+                </div>
+                <div class="card-stats">
+                    <div class="stat">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Tasks Today</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3 class="card-title">Discord Bots</h3>
+                </div>
+                <div class="card-content">
+                    <p>Your <strong>2 Discord bots</strong> are online and serving 150+ users.</p>
+                </div>
+                <div class="card-stats">
+                    <div class="stat">
+                        <div class="stat-number">1.2K</div>
+                        <div class="stat-label">Commands Today</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">99.8%</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools Section -->
+        <section class="tools-section">
+            <h3><i class="fas fa-tools"></i> Security Tools</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4 class="tool-title">Vulnerability Scanner</h4>
+                    <p class="tool-desc">Scan your systems for security vulnerabilities and potential threats.</p>
+                    <button class="tool-btn">Run Scan</button>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h4 class="tool-title">Password Auditor</h4>
+                    <p class="tool-desc">Check the strength of your passwords and get recommendations.</p>
+                    <button class="tool-btn">Check Passwords</button>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4 class="tool-title">Firewall Manager</h4>
+                    <p class="tool-desc">Configure and monitor your firewall settings in real-time.</p>
+                    <button class="tool-btn">Manage Firewall</button>
+                </div>
+                
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <h4 class="tool-title">Penetration Test</h4>
+                    <p class="tool-desc">Simulate cyber attacks to test your system's defenses.</p>
+                    <button class="tool-btn">Start Test</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Change Password Section -->
+        <section class="change-password-section">
+            <h3><i class="fas fa-key"></i> Change Password</h3>
+            <form id="changePasswordForm">
+                <div class="input-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" required>
+                </div>
+                
+                <button type="submit" class="auth-btn">Change Password</button>
+            </form>
+        </section>
+
+        <!-- Admin Section (Only visible to admins) -->
+        <section class="admin-section" id="adminSection" style="display: none;">
+            <h3><i class="fas fa-users-cog"></i> User Management</h3>
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Users will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // API Base URL
+        const API_BASE = 'http://localhost:3000/api';
+        
+        // Get current user from localStorage
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        
+        // Redirect to login if not authenticated
+        if (!currentUser.email) {
+            window.location.href = 'index.html';
+        }
+        
+        // DOM Elements
+        const userNameElement = document.getElementById('userName');
+        const userRoleElement = document.getElementById('userRole');
+        const userAvatarElement = document.getElementById('userAvatar');
+        const welcomeMessageElement = document.getElementById('welcomeMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const adminSection = document.getElementById('adminSection');
+        const usersTableBody = document.getElementById('usersTableBody');
+        const changePasswordForm = document.getElementById('changePasswordForm');
+        
+        // Initialize user info
+        function initializeUserInfo() {
+            userNameElement.textContent = currentUser.name;
+            userRoleElement.textContent = currentUser.isAdmin ? 'Administrator' : 'User';
+            userAvatarElement.textContent = currentUser.name.charAt(0).toUpperCase();
+            welcomeMessageElement.textContent = `Welcome back, ${currentUser.name}!`;
+            
+            // Show admin section if user is admin
+            if (currentUser.isAdmin) {
+                adminSection.style.display = 'block';
+                loadUsers();
+            }
+        }
+        
+        // Load users for admin
+        async function loadUsers() {
+            try {
+                console.log('Loading users for admin...');
+                
+                const response = await fetch(`${API_BASE}/admin/users`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('Users loaded successfully:', data.users.length);
+                    displayUsers(data.users);
+                } else {
+                    console.error('Failed to load users:', data.message);
+                    showNotification(data.message || 'Failed to load users', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showNotification('Network error. Please try again.', 'error');
+            }
+        }
+        
+        // Display users in table
+        function displayUsers(users) {
+            usersTableBody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        ${user.isAdmin ? 
+                            '<span class="admin-badge">Admin</span>' : 
+                            '<span class="user-badge">User</span>'
+                        }
+                    </td>
+                    <td>
+                        <span style="color: var(--success);">Active</span>
+                    </td>
+                    <td>
+                        ${!user.isAdmin ? 
+                            `<button class="make-admin-btn" data-email="${user.email}">
+                                Make Admin
+                            </button>` : 
+                            ''
+                        }
+                    </td>
+                `;
+                
+                usersTableBody.appendChild(row);
+            });
+            
+            // Add event listeners to make admin buttons
+            document.querySelectorAll('.make-admin-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const email = this.getAttribute('data-email');
+                    makeAdmin(email);
+                });
+            });
+        }
+        
+        // Make user admin
+        async function makeAdmin(email) {
+            try {
+                console.log('Making user admin:', email);
+                
+                const response = await fetch(`${API_BASE}/admin/users/${email}/make-admin`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('User made admin successfully:', email);
+                    showNotification('User added as admin successfully', 'success');
+                    loadUsers(); // Reload users
+                } else {
+                    console.error('Failed to make user admin:', data.message);
+                    showNotification(data.message || 'Failed to make user admin', 'error');
+                }
+            } catch (error) {
+                console.error('Error making user admin:', error);
+                showNotification('Network error. Please try again.', 'error');
+            }
+        }
+        
+        // Change password
+        changePasswordForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            
+            // Validation
+            if (!currentPassword || !newPassword || !confirmNewPassword) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmNewPassword) {
+                showNotification('New passwords do not match', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                showNotification('New password must be at least 8 characters long', 'error');
+                return;
+            }
+            
+            try {
+                console.log('Changing password for:', currentUser.email);
+                
+                const response = await fetch(`${API_BASE}/change-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: currentUser.email,
+                        currentPassword,
+                        newPassword
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('Password changed successfully');
+                    showNotification('Password changed successfully', 'success');
+                    changePasswordForm.reset();
+                } else {
+                    console.error('Failed to change password:', data.message);
+                    showNotification(data.message || 'Failed to change password', 'error');
+                }
+            } catch (error) {
+                console.error('Error changing password:', error);
+                showNotification('Network error. Please try again.', 'error');
+            }
+        });
+        
+        // Logout
+        logoutBtn.addEventListener('click', function() {
+            console.log('User logging out:', currentUser.email);
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Tool buttons functionality
+        document.querySelectorAll('.tool-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const toolName = this.closest('.tool-card').querySelector('.tool-title').textContent;
+                showNotification(`Starting ${toolName}...`, 'success');
+                
+                // Simulate tool execution
+                setTimeout(() => {
+                    showNotification(`${toolName} completed successfully!`, 'success');
+                }, 2000);
+            });
+        });
+        
+        // Initialize page
+        initializeUserInfo();
+    </script>
+</body>
+</html>

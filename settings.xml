@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+
+  <!-- Genral Info عامة -->
+  <general>
+    <siteName>Wailand Team</siteName>
+    <siteURL>https://wailand.ct.ws/</siteURL>
+    <language>en</language>
+    <timezone>Asia/United Arab Emirates</timezone>
+    <currency>SAR</currency>
+  </general>
+
+  <!-- بيانات الاتصال -->
+  <contact>
+    <phone>+972 59 270 8000</phone>
+    <email>info@wailand.com</email>
+    <address>اسيا/الاتحاد العربي الاماراتي</address>
+    <fax>+966-11-1234567</fax>
+  </contact>
+
+  <!-- إعدادات SEO -->
+  <seo>
+    <metaDescription></metaDescription>
+    <metaKeywords>تقنية, برمجة, تطوير مواقع, حلول تقنية</metaKeywords>
+    <googleAnalyticsID>UA-12345678-9</googleAnalyticsID>
+  </seo>
+
+  <!-- إعدادات الشبكات الاجتماعية -->
+  <social>
+    <facebook>https://facebook.com/futuretech</facebook>
+    <twitter>https://twitter.com/futuretech</twitter>
+    <linkedin>https://linkedin.com/company/futuretech</linkedin>
+    <instagram>https://instagram.com/futuretech</instagram>
+  </social>
+
+  <!-- إعدادات البريد الإلكتروني -->
+  <emailSettings>
+    <smtpServer>smtp.futuretech.com</smtpServer>
+    <smtpPort>587</smtpPort>
+    <smtpUser>noreply@futuretech.com</smtpUser>
+    <smtpPassword>*********</smtpPassword>
+    <useSSL>true</useSSL>
+  </emailSettings>
+
+</settings>

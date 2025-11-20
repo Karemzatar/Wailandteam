@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام مراقبة الحالة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #334155;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --online: #10b981;
+            --warning: #f59e0b;
+            --offline: #ef4444;
+            --card-width: 180px;
+            --card-height: 100px;
+            --gap: 8px;
+            --admin-color: #3b82f6;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --text-light: #94a3b8;
+            --border-color: #334155;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            font-size: 1.75rem;
+            color: #3b82f6;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 8px 36px 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            width: 200px;
+            font-size: 0.9rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .theme-toggle, .admin-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--card-bg);
+        }
+
+        .admin-toggle {
+            color: var(--admin-color);
+            border-color: var(--admin-color);
+        }
+
+        .admin-toggle.admin-active {
+            background-color: var(--admin-color);
+            color: white;
+        }
+
+        .stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .stat-icon.online {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--online);
+        }
+
+        .stat-icon.warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-icon.offline {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--offline);
+        }
+
+        .stat-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(var(--card-width), 1fr));
+            gap: var(--gap);
+            margin-bottom: 40px;
+        }
+
+        .status-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            height: var(--card-height);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .status-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .status-icon {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .status-desc {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .status-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+        }
+
+        .status-indicator.online {
+            background-color: var(--online);
+        }
+
+        .status-indicator.warning {
+            background-color: var(--warning);
+        }
+
+        .status-indicator.offline {
+            background-color: var(--offline);
+        }
+
+        .admin-controls {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            display: none;
+            gap: 4px;
+        }
+
+        .admin-mode .admin-controls {
+            display: flex;
+        }
+
+        .admin-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+
+        .edit-btn {
+            background-color: var(--warning);
+        }
+
+        .delete-btn {
+            background-color: var(--offline);
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            right: 50%;
+            transform: translateX(50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+
+        .status-card:hover .tooltip {
+            opacity: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 20px 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .close-modal:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+        }
+
+        .modal-desc {
+            margin-bottom: 16px;
+            color: var(--text-light);
+        }
+
+        .modal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .detail-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .admin-panel {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-panel h2 {
+            margin-bottom: 16px;
+            color: var(--admin-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .admin-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--admin-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .password-modal {
+            display: none;
+        }
+
+        .password-modal.active {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            .status-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .search-box input {
+                width: 180px;
+            }
+            
+            .admin-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .status-grid {
+                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+            
+            .search-box input {
+                width: 150px;
+            }
+            
+            .admin-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-chart-network logo-icon"></i>
+                <h1>نظام مراقبة الحالة</h1>
+            </div>
+            <div class="controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="ابحث في الخدمات...">
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                    <span>الوضع الليلي</span>
+                </button>
+                <button class="admin-toggle" id="adminToggle">
+                    <i class="fas fa-cog"></i>
+                    <span>وضع المدير</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="admin-panel" id="adminPanel">
+            <h2><i class="fas fa-user-shield"></i> لوحة التحكم</h2>
+            <div class="admin-actions">
+                <button class="btn btn-primary" id="addServiceBtn">
+                    <i class="fas fa-plus"></i> إضافة خدمة جديدة
+                </button>
+                <button class="btn btn-secondary" id="resetDataBtn">
+                    <i class="fas fa-redo"></i> إعادة تعيين البيانات
+                </button>
+            </div>
+            <form class="admin-form" id="serviceForm">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label for="serviceTitle">اسم الخدمة</label>
+                    <input type="text" id="serviceTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceDesc">الوصف</label>
+                    <input type="text" id="serviceDesc" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceStatus">الحالة</label>
+                    <select id="serviceStatus" required>
+                        <option value="online">متصل</option>
+                        <option value="warning">غير مستقر</option>
+                        <option value="offline">غير متصل</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceIcon">الأيقونة</label>
+                    <select id="serviceIcon" required>
+                        <option value="fab fa-discord">ديسكورد</option>
+                        <option value="fas fa-server">خادم</option>
+                        <option value="fab fa-twitter">تويتر</option>
+                        <option value="fab fa-instagram">انستغرام</option>
+                        <option value="fab fa-facebook">فيسبوك</option>
+                        <option value="fab fa-tiktok">تيك توك</option>
+                        <option value="fas fa-code">رمز</option>
+                        <option value="fas fa-tachometer-alt">عداد السرعة</option>
+                        <option value="fas fa-bell">جرس</option>
+                        <option value="fas fa-user-plus">مستخدم جديد</option>
+                        <option value="fas fa-envelope">بريد</option>
+                        <option value="fas fa-microphone">ميكروفون</option>
+                        <option value="fas fa-shield-alt">درع</option>
+                        <option value="fas fa-filter">فلتر</option>
+                        <option value="fas fa-chart-bar">رسم بياني</option>
+                        <option value="fas fa-heartbeat">نبض</option>
+                        <option value="fas fa-clock">ساعة</option>
+                        <option value="fas fa-bug">خلل</option>
+                        <option value="fas fa-database">قاعدة بيانات</option>
+                        <option value="fas fa-memory">ذاكرة</option>
+                        <option value="fas fa-chart-line">خط بياني</option>
+                        <option value="fas fa-headset">دعم</option>
+                        <option value="fas fa-credit-card">بطاقة ائتمان</option>
+                        <option value="fas fa-save">حفظ</option>
+                        <option value="fas fa-comments">محادثات</option>
+                        <option value="fas fa-sync">تحديث</option>
+                        <option value="fas fa-list-ol">قائمة</option>
+                        <option value="fas fa-clipboard-list">قائمة المهام</option>
+                        <option value="fas fa-ban">حظر</option>
+                        <option value="fas fa-broadcast-tower">بث</option>
+                        <option value="fas fa-smile">ابتسامة</option>
+                        <option value="fas fa-robot">روبوت</option>
+                        <option value="fas fa-comment-dots">تعليقات</option>
+                        <option value="fas fa-lock">قفل</option>
+                        <option value="fas fa-power-off">تشغيل/إيقاف</option>
+                        <option value="fas fa-sync-alt">مزامنة</option>
+                        <option value="fas fa-plug">توصيل</option>
+                        <option value="fas fa-tools">أدوات</option>
+                        <option value="fas fa-flag">علم</option>
+                        <option value="fas fa-stethoscope">فحص</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="responseTime">وقت الاستجابة</label>
+                    <input type="text" id="responseTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="uptime">معدل التشغيل</label>
+                    <input type="text" id="uptime" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastIncident">آخر حادث</label>
+                    <input type="text" id="lastIncident" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelEdit">إلغاء</button>
+                    <button type="submit" class="btn btn-primary" id="saveServiceBtn">حفظ الخدمة</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon online">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="onlineCount">0</h3>
+                    <p>الخدمات المتصلة</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="warningCount">0</h3>
+                    <p>الخدمات غير المستقرة</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon offline">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="offlineCount">0</h3>
+                    <p>الخدمات غير المتصلة</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-grid" id="statusGrid">
+            <!-- سيتم إنشاء بطاقات الحالة بواسطة JavaScript -->
+        </div>
+
+        <footer>
+            <p>آخر تحديث: <span id="lastUpdated"></span> | نظام مراقبة الحالة الإصدار 1.0</p>
+        </footer>
+    </div>
+
+    <div class="modal" id="statusModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span id="modalServiceName">اسم الخدمة</span>
+                    <span class="modal-status" id="modalStatusIndicator"></span>
+                </h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc" id="modalDescription">وصف الخدمة يظهر هنا.</p>
+                <div class="modal-details">
+                    <div class="detail-item">
+                        <span class="detail-label">الحالة</span>
+                        <span class="detail-value" id="modalStatusText">متصل</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">وقت الاستجابة</span>
+                        <span class="detail-value" id="modalResponseTime">45ms</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">معدل التشغيل</span>
+                        <span class="detail-value" id="modalUptime">99.8%</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">آخر حادث</span>
+                        <span class="detail-value" id="modalLastIncident">قبل يومين</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal password-modal" id="passwordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-lock"></i> التحقق من الهوية
+                </h2>
+            </div>
+            <div class="modal-body">
+                <p>أدخل كلمة المرور للوصول إلى لوحة التحكم:</p>
+                <div class="form-group full-width" style="margin-top: 16px;">
+                    <input type="password" id="passwordInput" placeholder="كلمة المرور">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelPassword">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="submitPassword">دخول</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات الحالة
+        let statusData = [
+            { id: 1, title: "بوت ديسكورد #1", desc: "بوت الإشراف الرئيسي", status: "online", icon: "fab fa-discord", responseTime: "32ms", uptime: "99.9%", lastIncident: "قبل 5 أيام" },
+            { id: 2, title: "بوت ديسكورد #2", desc: "بوت الموسيقى والترفيه", status: "online", icon: "fab fa-discord", responseTime: "45ms", uptime: "99.8%", lastIncident: "قبل أسبوع" },
+            { id: 3, title: "بوت ديسكورد #3", desc: "وظائف المساعدة والأدوات", status: "warning", icon: "fab fa-discord", responseTime: "120ms", uptime: "98.5%", lastIncident: "قبل يومين" },
+            { id: 4, title: "خادم ديسكورد #1", desc: "خادم المجتمع الرئيسي", status: "online", icon: "fas fa-server", responseTime: "18ms", uptime: "100%", lastIncident: "لا يوجد" },
+            { id: 5, title: "خادم ديسكورد #2", desc: "الاختبار والتطوير", status: "online", icon: "fas fa-server", responseTime: "22ms", uptime: "99.9%", lastIncident: "قبل 3 أسابيع" },
+            { id: 6, title: "خلية تويتر", desc: "النشر التلقائي للتغريدات", status: "online", icon: "fab fa-twitter", responseTime: "65ms", uptime: "99.7%", lastIncident: "قبل 4 أيام" },
+            { id: 7, title: "خلية انستغرام", desc: "جدولة المحتوى", status: "warning", icon: "fab fa-instagram", responseTime: "150ms", uptime: "97.2%", lastIncident: "قبل يوم" },
+            { id: 8, title: "صفحة فيسبوك", desc: "واجهة برمجة إدارة الصفحة", status: "online", icon: "fab fa-facebook", responseTime: "78ms", uptime: "99.5%", lastIncident: "قبل أسبوع" },
+            { id: 9, title: "فيديوهات تيك توك", desc: "خدمة رفع الفيديوهات", status: "offline", icon: "fab fa-tiktok", responseTime: "غير متوفر", uptime: "95.1%", lastIncident: "حاليًا" },
+            { id: 10, title: "واجهة برمجة أوامر البوت", desc: "نظام معالجة الأوامر", status: "online", icon: "fas fa-code", responseTime: "28ms", uptime: "99.9%", lastIncident: "قبل أسبوعين" }
+        ];
+
+        // العناصر DOM
+        const statusGrid = document.getElementById('statusGrid');
+        const searchInput = document.getElementById('searchInput');
+        const themeToggle = document.getElementById('themeToggle');
+        const adminToggle = document.getElementById('adminToggle');
+        const adminPanel = document.getElementById('adminPanel');
+        const statusModal = document.getElementById('statusModal');
+        const closeModal = document.getElementById('closeModal');
+        const onlineCount = document.getElementById('onlineCount');
+        const warningCount = document.getElementById('warningCount');
+        const offlineCount = document.getElementById('offlineCount');
+        const lastUpdated = document.getElementById('lastUpdated');
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordInput = document.getElementById('passwordInput');
+        const cancelPassword = document.getElementById('cancelPassword');
+        const submitPassword = document.getElementById('submitPassword');
+        const serviceForm = document.getElementById('serviceForm');
+        const addServiceBtn = document.getElementById('addServiceBtn');
+        const resetDataBtn = document.getElementById('resetDataBtn');
+        const cancelEdit = document.getElementById('cancelEdit');
+        const saveServiceBtn = document.getElementById('saveServiceBtn');
+
+        // تهيئة الصفحة
+        function init() {
+            // تحميل البيانات من التخزين المحلي إذا كانت موجودة
+            const savedData = localStorage.getItem('statusData');
+            if (savedData) {
+                statusData = JSON.parse(savedData);
+            }
+            
+            renderStatusCards(statusData);
+            updateStats();
+            setLastUpdated();
+            
+            // إعداد مستمعي الأحداث
+            searchInput.addEventListener('input', filterCards);
+            themeToggle.addEventListener('click', toggleTheme);
+            adminToggle.addEventListener('click', toggleAdminMode);
+            closeModal.addEventListener('click', () => {
+                statusModal.style.display = 'none';
+            });
+            cancelPassword.addEventListener('click', () => {
+                passwordModal.classList.remove('active');
+                passwordInput.value = '';
+            });
+            submitPassword.addEventListener('click', checkPassword);
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkPassword();
+            });
+            addServiceBtn.addEventListener('click', () => openServiceForm());
+            resetDataBtn.addEventListener('click', resetData);
+            cancelEdit.addEventListener('click', cancelServiceForm);
+            serviceForm.addEventListener('submit', saveService);
+            
+            // إغلاق النافذة المنبثقة بالنقر خارجها
+            window.addEventListener('click', (e) => {
+                if (e.target === statusModal) {
+                    statusModal.style.display = 'none';
+                }
+                if (e.target === passwordModal) {
+                    passwordModal.classList.remove('active');
+                    passwordInput.value = '';
+                }
+            });
+            
+            // التنقل باستخدام لوحة المفاتيح
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (statusModal.style.display === 'flex') {
+                        statusModal.style.display = 'none';
+                    }
+                    if (passwordModal.classList.contains('active')) {
+                        passwordModal.classList.remove('active');
+                        passwordInput.value = '';
+                    }
+                }
+            });
+        }
+
+        // عرض بطاقات الحالة
+        function renderStatusCards(data) {
+            statusGrid.innerHTML = '';
+            
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `status-card`;
+                card.dataset.id = item.id;
+                
+                card.innerHTML = `
+                    <div class="admin-controls">
+                        <button class="admin-btn edit-btn" data-id="${item.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="admin-btn delete-btn" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="status-header">
+                        <div>
+                            <div class="status-title">${item.title}</div>
+                            <div class="status-desc">${item.desc}</div>
+                        </div>
+                        <i class="${item.icon} status-icon"></i>
+                    </div>
+                    <div class="status-indicator ${item.status}"></div>
+                    <div class="tooltip">انقر للتفاصيل</div>
+                `;
+                
+                card.addEventListener('click', (e) => {
+                    if (!e.target.closest('.admin-controls')) {
+                        openModal(item);
+                    }
+                });
+                
+                // إضافة مستمعي الأحداث لأزرار التحكم
+                const editBtn = card.querySelector('.edit-btn');
+                const deleteBtn = card.querySelector('.delete-btn');
+                
+                editBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    editService(item.id);
+                });
+                
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteService(item.id);
+                });
+                
+                statusGrid.appendChild(card);
+            });
+        }
+
+        // تصفية البطاقات بناءً على إدخال البحث
+        function filterCards() {
+            const query = searchInput.value.toLowerCase();
+            const filteredData = statusData.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.desc.toLowerCase().includes(query)
+            );
+            renderStatusCards(filteredData);
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            const online = statusData.filter(item => item.status === 'online').length;
+            const warning = statusData.filter(item => item.status === 'warning').length;
+            const offline = statusData.filter(item => item.status === 'offline').length;
+            
+            onlineCount.textContent = online;
+            warningCount.textContent = warning;
+            offlineCount.textContent = offline;
+        }
+
+        // تعيين وقت آخر تحديث
+        function setLastUpdated() {
+            const now = new Date();
+            lastUpdated.textContent = now.toLocaleString('ar-SA');
+        }
+
+        // تبديل الوضع الليلي/النهاري
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.setAttribute('data-theme', newTheme);
+            themeToggle.innerHTML = newTheme === 'light' 
+                ? '<i class="fas fa-moon"></i><span>الوضع الليلي</span>' 
+                : '<i class="fas fa-sun"></i><span>الوضع النهاري</span>';
+                
+            // حفظ التفضيل في التخزين المحلي
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // تبديل وضع المدير
+        function toggleAdminMode() {
+            if (adminToggle.classList.contains('admin-active')) {
+                // الخروج من وضع المدير
+                adminToggle.classList.remove('admin-active');
+                adminPanel.classList.remove('active');
+                document.body.classList.remove('admin-mode');
+            } else {
+                // طلب كلمة المرور للدخول إلى وضع المدير
+                passwordModal.classList.add('active');
+                passwordInput.focus();
+            }
+        }
+
+        // التحقق من كلمة المرور
+        function checkPassword() {
+            const password = passwordInput.value;
+            if (password === 'wailandadmin') {
+                // كلمة المرور صحيحة
+                adminToggle.classList.add('admin-active');
+                adminPanel.classList.add('active');
+                document.body.classList.add('admin-mode');
+                passwordModal.classList.remove('active');
+                passwordInput.value = '';
+            } else {
+                // كلمة المرور خاطئة
+                alert('كلمة المرور غير صحيحة!');
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        // فتح نموذج الخدمة
+        function openServiceForm(service = null) {
+            if (service) {
+                // تحرير خدمة موجودة
+                document.getElementById('editId').value = service.id;
+                document.getElementById('serviceTitle').value = service.title;
+                document.getElementById('serviceDesc').value = service.desc;
+                document.getElementById('serviceStatus').value = service.status;
+                document.getElementById('serviceIcon').value = service.icon;
+                document.getElementById('responseTime').value = service.responseTime;
+                document.getElementById('uptime').value = service.uptime;
+                document.getElementById('lastIncident').value = service.lastIncident;
+                saveServiceBtn.textContent = 'تحديث الخدمة';
+            } else {
+                // إضافة خدمة جديدة
+                document.getElementById('editId').value = '';
+                document.getElementById('serviceTitle').value = '';
+                document.getElementById('serviceDesc').value = '';
+                document.getElementById('serviceStatus').value = 'online';
+                document.getElementById('serviceIcon').value = 'fab fa-discord';
+                document.getElementById('responseTime').value = '50ms';
+                document.getElementById('uptime').value = '99.5%';
+                document.getElementById('lastIncident').value = 'لا يوجد';
+                saveServiceBtn.textContent = 'إضافة الخدمة';
+            }
+        }
+
+        // إلغاء تحرير النموذج
+        function cancelServiceForm() {
+            serviceForm.reset();
+            document.getElementById('editId').value = '';
+        }
+
+        // حفظ الخدمة
+        function saveService(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('editId').value;
+            const title = document.getElementById('serviceTitle').value;
+            const desc = document.getElementById('serviceDesc').value;
+            const status = document.getElementById('serviceStatus').value;
+            const icon = document.getElementById('serviceIcon').value;
+            const responseTime = document.getElementById('responseTime').value;
+            const uptime = document.getElementById('uptime').value;
+            const lastIncident = document.getElementById('lastIncident').value;
+            
+            if (id) {
+                // تحديث خدمة موجودة
+                const index = statusData.findIndex(item => item.id == id);
+                if (index !== -1) {
+                    statusData[index] = {
+                        ...statusData[index],
+                        title,
+                        desc,
+                        status,
+                        icon,
+                        responseTime,
+                        uptime,
+                        lastIncident
+                    };
+                }
+            } else {
+                // إضافة خدمة جديدة
+                const newId = statusData.length > 0 ? Math.max(...statusData.map(item => item.id)) + 1 : 1;
+                statusData.unshift({
+                    id: newId,
+                    title,
+                    desc,
+                    status,
+                    icon,
+                    responseTime,
+                    uptime,
+                    lastIncident
+                });
+            }
+            
+            // حفظ البيانات وعرضها
+            saveData();
+            renderStatusCards(statusData);
+            updateStats();
+            serviceForm.reset();
+            document.getElementById('editId').value = '';
+            
+            alert(id ? 'تم تحديث الخدمة بنجاح!' : 'تم إضافة الخدمة بنجاح!');
+        }
+
+        // تحرير خدمة
+        function editService(id) {
+            const service = statusData.find(item => item.id === id);
+            if (service) {
+                openServiceForm(service);
+                // التمرير إلى النموذج
+                adminPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // حذف خدمة
+        function deleteService(id) {
+            if (confirm('هل أنت متأكد من أنك تريد حذف هذه الخدمة؟')) {
+                statusData = statusData.filter(item => item.id !== id);
+                saveData();
+                renderStatusCards(statusData);
+                updateStats();
+                alert('تم حذف الخدمة بنجاح!');
+            }
+        }
+
+        // إعادة تعيين البيانات
+        function resetData() {
+            if (confirm('هل أنت متأكد من أنك تريد إعادة تعيين جميع البيانات؟ سيتم فقدان جميع التغييرات.')) {
+                localStorage.removeItem('statusData');
+                location.reload();
+            }
+        }
+
+        // فتح النافذة المنبثقة بالتفاصيل
+        function openModal(item) {
+            document.getElementById('modalServiceName').textContent = item.title;
+            document.getElementById('modalDescription').textContent = item.desc;
+            document.getElementById('modalStatusText').textContent = 
+                item.status === 'online' ? 'متصل' : 
+                item.status === 'warning' ? 'غير مستقر' : 'غير متصل';
+            document.getElementById('modalResponseTime').textContent = item.responseTime;
+            document.getElementById('modalUptime').textContent = item.uptime;
+            document.getElementById('modalLastIncident').textContent = item.lastIncident;
+            
+            const statusIndicator = document.getElementById('modalStatusIndicator');
+            statusIndicator.className = 'modal-status';
+            statusIndicator.classList.add(item.status);
+            
+            statusModal.style.display = 'flex';
+        }
+
+        // حفظ البيانات في التخزين المحلي
+        function saveData() {
+            localStorage.setItem('statusData', JSON.stringify(statusData));
+        }
+
+        // تحميل التفضيلات عند بدء التشغيل
+        function loadPreferences() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.setAttribute('data-theme', savedTheme);
+                themeToggle.innerHTML = savedTheme === 'light' 
+                    ? '<i class="fas fa-moon"></i><span>الوضع الليلي</span>' 
+                    : '<i class="fas fa-sun"></i><span>الوضع النهاري</span>';
+            }
+        }
+
+        // تهيئة التطبيق
+        loadPreferences();
+        init();
+    </script>
+</body>
+</html>
