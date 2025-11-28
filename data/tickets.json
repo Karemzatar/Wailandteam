@@ -1,0 +1,185 @@
+[
+  {
+    "id": "3d3ff42a-a2a3-4c84-9f05-b48b374f3ea3",
+    "username": "beatrix",
+    "email": "karemzatar@icloud.com",
+    "number": "44444444444",
+    "type": "technical",
+    "subject": "44",
+    "status": "closed",
+    "createdAt": "2025-11-23T17:15:03.830Z",
+    "claimedBy": "DEw",
+    "messages": [
+      {
+        "id": "cba867a4-913a-49c2-ac7e-3294facd96cb",
+        "sender": "DEw",
+        "type": "text",
+        "content": "Hola",
+        "timestamp": "2025-11-23T17:15:47.917Z"
+      },
+      {
+        "id": "569b0fec-4d09-4106-b44a-9826765dddc8",
+        "sender": "beatrix",
+        "type": "text",
+        "content": "Hola",
+        "timestamp": "2025-11-23T17:15:52.500Z"
+      },
+      {
+        "id": "dc610b0d-86b7-4577-9e3e-db3cc565cf24",
+        "sender": "DEw",
+        "type": "text",
+        "content": "D",
+        "timestamp": "2025-11-23T17:16:08.481Z"
+      },
+      {
+        "id": "f4221327-2941-429a-b4c4-897b7ecb6a41",
+        "sender": "beatrix",
+        "type": "file",
+        "content": "File: card-print.png",
+        "timestamp": "2025-11-23T17:16:27.865Z",
+        "file": {
+          "filename": "1763918187850-card-print.png",
+          "originalname": "card-print.png",
+          "path": "/uploads/1763918187850-card-print.png"
+        }
+      },
+      {
+        "id": "953e4524-00be-41cb-bcda-53b9226c5035",
+        "sender": "DEw",
+        "type": "text",
+        "content": "close",
+        "timestamp": "2025-11-23T17:18:02.029Z"
+      },
+      {
+        "id": "92ae1904-1e9b-4dcc-8a8b-a7dc5513330e",
+        "sender": "DEw",
+        "type": "text",
+        "content": "close - dew",
+        "timestamp": "2025-11-23T17:18:05.955Z"
+      }
+    ],
+    "closedReason": "dew",
+    "closedBy": "DEw",
+    "closedAt": "2025-11-23T17:18:05.963Z"
+  },
+  {
+    "id": "5481b76e-6454-4873-b3ea-673df26e674c",
+    "username": "beatrix",
+    "email": "karemzatar@icloud.com",
+    "number": "4444",
+    "type": "technical",
+    "subject": "dddd",
+    "status": "claimed",
+    "createdAt": "2025-11-23T17:24:41.096Z",
+    "claimedBy": "ddd",
+    "messages": [
+      {
+        "id": "1ec14fc0-5498-4ace-8875-80078bfce1d2",
+        "sender": "ddd",
+        "type": "text",
+        "content": "Hola",
+        "timestamp": "2025-11-23T17:24:54.740Z"
+      },
+      {
+        "id": "993047d4-e19d-412c-986e-cb45183e59eb",
+        "sender": "beatrix",
+        "type": "text",
+        "content": "Hello",
+        "timestamp": "2025-11-23T17:24:59.749Z"
+      },
+      {
+        "id": "cd533cf0-4f4f-4c5d-b4ee-e0eb1c6a4ea0",
+        "sender": "ddd",
+        "type": "file",
+        "content": "File: كيف تشغل.png",
+        "timestamp": "2025-11-23T17:25:08.556Z",
+        "file": {
+          "filename": "1763918708548-ÙÙÙ ØªØ´ØºÙ.png",
+          "originalname": "ÙÙÙ ØªØ´ØºÙ.png",
+          "path": "/uploads/1763918708548-ÙÙÙ ØªØ´ØºÙ.png"
+        }
+      },
+      {
+        "id": "10c83891-5c9b-4f95-854d-adb7454dde51",
+        "sender": "ddd",
+        "type": "file",
+        "content": "File: ddd.png",
+        "timestamp": "2025-11-23T17:25:12.845Z",
+        "file": {
+          "filename": "1763918712842-ddd.png",
+          "originalname": "ddd.png",
+          "path": "/uploads/1763918712842-ddd.png"
+        }
+      }
+    ]
+  },
+  {
+    "id": "4cf2127f-c8a3-4098-b450-551bc31d219d",
+    "username": "beatrix",
+    "email": "karemzatar@icloud.com",
+    "number": "44444444444",
+    "type": "technical",
+    "subject": "ddddd",
+    "status": "closed",
+    "createdAt": "2025-11-23T17:29:48.614Z",
+    "claimedBy": "ييي",
+    "messages": [
+      {
+        "id": "4831676b-83c8-4d40-9f27-3954b21dff75",
+        "sender": "ييي",
+        "type": "text",
+        "content": "يئئئئئئ",
+        "timestamp": "2025-11-23T17:30:09.485Z"
+      },
+      {
+        "id": "5853cc79-5108-46d5-8186-01bca0bf93f5",
+        "sender": "beatrix",
+        "type": "text",
+        "content": "ىااااااا",
+        "timestamp": "2025-11-23T17:30:18.821Z"
+      },
+      {
+        "id": "52b0492a-f036-4b56-a275-d2446511e914",
+        "sender": "ييي",
+        "type": "file",
+        "content": "File: ddd.png",
+        "timestamp": "2025-11-23T17:30:25.487Z",
+        "file": {
+          "filename": "1763919025485-ddd.png",
+          "originalname": "ddd.png",
+          "path": "/uploads/1763919025485-ddd.png"
+        }
+      },
+      {
+        "id": "382d2f39-e113-4cc9-a182-dc7cf44d997a",
+        "sender": "ييي",
+        "type": "text",
+        "content": "close - ddd",
+        "timestamp": "2025-11-23T17:30:36.489Z"
+      }
+    ],
+    "closedReason": "ddd",
+    "closedBy": "ييي",
+    "closedAt": "2025-11-23T17:30:36.495Z"
+  },
+  {
+    "id": "d7546c78-6448-4038-a06e-1d585215fb0b",
+    "username": "beatrix",
+    "email": "karemzatar@icloud.com",
+    "number": "44444444444",
+    "type": "billing",
+    "subject": "ddddd",
+    "status": "open",
+    "createdAt": "2025-11-23T17:48:09.099Z",
+    "claimedBy": null,
+    "messages": [
+      {
+        "id": "17552227-1c51-47ce-ad8c-29473b587934",
+        "sender": "beatrix",
+        "type": "text",
+        "content": "يييييييي",
+        "timestamp": "2025-11-23T17:48:16.039Z"
+      }
+    ]
+  }
+]

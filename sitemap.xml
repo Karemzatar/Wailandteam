@@ -6,22 +6,22 @@
                       http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   
   <url>
-    <loc>https://wailand.ct.ws/</loc>
-    <lastmod>2025-10-12</lastmod>
-    <changefreq>daily</changefreq>
+    <loc>https://wailand.xyz/</loc>
+    <lastmod>2026-3-1</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.00</priority>
   </url>
 
   <url>
-    <loc>https://wailand.ct.ws/home.html</loc>
-    <lastmod>2025-09-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <loc>https://wailand.xyz/home.html</loc>
+    <lastmod>2026-3-1</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.00</priority>
   </url>
 
   <url>
-    <loc>https://wailand.ct.ws/</loc>
-    <lastmod>2025-10-01</lastmod>
+    <loc>https://wailand.xyz/</loc>
+    <lastmod>2026-3-1</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.70</priority>
   </url>

@@ -3,6 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="descrption" content="Discover Wailand Team — expert developers creating fast, modern solutions. Boost your project today and start building smarter!">
+    <meta name="keywords" content="Wailand Team, Wailand developers, web development, software development, cybersecurity solutions, AI tools, automation systems, UI UX design, full-stack development, secure hosting, tech solutions, digital innovation, programming services, SaaS development, website optimization, custom applications, tech agency, modern web design">
+    <meta property="og:title" content="Wailand Team — Expert Web & Software Development">
+    <meta property="og:description" content="Discover Wailand Team: professional developers creating modern websites, AI tools, and cybersecurity solutions. Boost your project today!">
+    <meta property="og:image" content="/wailand/assets/images/wailand-logo.png">
+    <meta property="og:url" content="https://wailand.xyz">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Wailand Team">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Wailand Team — Innovative Web & Software Solutions">
+    <meta property="og:description" content="Join Wailand Team, the expert developers delivering modern websites, AI tools, cybersecurity solutions, automation systems, and full-stack development. Boost your project today with Wailand Team!">
+    <meta property="og:image" content="/wailand/assets/images/wailand-logo.png">
+    <meta property="og:url" content="https://wailand.xyz">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Wailand Team">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Wailand Team",
+  "url": "https://wailand.xyz",
+  "logo": "content="/wailand/assets/images/wailand-logo.png"",
+  "sameAs": [
+    "https://www.facebook.com/wailandteam",
+    "https://twitter.com/wailandteam",
+    "https://www.linkedin.com/company/wailandteam",
+    "https://www.instagram.com/wailandteam"
+  ],
+  "description": "Wailand Team is a leading tech organization delivering modern websites, AI tools, cybersecurity solutions, automation systems, and full-stack development. Boost your project today!",
+  "foundingDate": "2026-03-01",
+  "founders": [
+    {
+      "@type": "Person",
+      "name": "Karem Zatar"
+    }
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "email": "support@wailandteam.xyz",
+    "telephone": "+972-59-279-8000"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Palestine",
+    "addressRegion": "West Bank"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://wailand.xyz/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script>
+  fetch("https://3e36f9b6-36ba-4d27-bfc1-c2fc9f63387e-00-hczrrmbzo42n.janeway.replit.dev/")
+    .then(response => response.text())  // أو .json() إذا السيرفر يرجع JSON
+    .then(data => console.log(data))
+    .catch(err => console.error("Error:", err));
+</script>
+
+
+
     <title>Wailand - Authentication</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -639,9 +702,16 @@
                     // Store user session
                     localStorage.setItem('currentUser', JSON.stringify(data.user));
                     // Redirect to home page
-                    setTimeout(() => {
-                        window.location.href = 'home.html';
-                    }, 1000);
+                    // ✅ التصحيح: Redirect to the correct route
+setTimeout(() => {
+    if (data.redirectTo) {
+        window.location.href = data.redirectTo;
+    } else if (data.user && data.user.role === 'admin') {
+        window.location.href = '/dashboard';
+    } else {
+        window.location.href = '/public/home.html';
+    }
+}, 1000);
                 } else {
                     showNotification(data.message, 'error');
                 }

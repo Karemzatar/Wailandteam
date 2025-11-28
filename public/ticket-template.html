@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Ticket...</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div id="ticketInfo" style="margin-bottom: 20px;">
+                <h1 id="ticketTitle">Loading Ticket...</h1>
+                <div id="ticketMeta"></div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h3 id="chatTitle">Support Chat</h3>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div style="text-align: center; padding: 40px;">
+                        <p>Loading messages...</p>
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type your message..." disabled>
+                    <input type="file" id="fileInput" class="file-input" accept="image/*,.pdf,.doc,.docx">
+                    <button class="file-btn" onclick="document.getElementById('fileInput').click()">📎</button>
+                    <button class="btn" id="sendButton" disabled>Send</button>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="Tickets.html" class="btn btn-secondary">Back to Main</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Countdown Overlay -->
+    <div id="countdownOverlay" class="countdown" style="display: none;">
+        <h2>Ticket Closing</h2>
+        <div class="countdown-number" id="countdownNumber">5</div>
+        <p id="closeReason"></p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/ticket.js"></script>
+</body>
+</html>

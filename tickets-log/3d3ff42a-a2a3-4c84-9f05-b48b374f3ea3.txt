@@ -1,0 +1,20 @@
+# 44
+Ticket Number: 3d3ff42a-a2a3-4c84-9f05-b48b374f3ea3
+From: beatrix
+Email: karemzatar@icloud.com
+Phone: 44444444444
+Type: technical
+Created: 2025-11-23T17:15:03.830Z
+Status: closed
+Claimed By: DEw
+Closed By: DEw
+Closed Reason: dew
+Closed At: 2025-11-23T17:18:05.963Z
+
+Messages:
+  [٢٣‏/١١‏/٢٠٢٥، ٧:١٥:٤٧ م] DEw: Hola
+  [٢٣‏/١١‏/٢٠٢٥، ٧:١٥:٥٢ م] beatrix: Hola
+  [٢٣‏/١١‏/٢٠٢٥، ٧:١٦:٠٨ م] DEw: D
+  [٢٣‏/١١‏/٢٠٢٥، ٧:١٦:٢٧ م] beatrix: [FILE] card-print.png
+  [٢٣‏/١١‏/٢٠٢٥، ٧:١٨:٠٢ م] DEw: close
+  [٢٣‏/١١‏/٢٠٢٥، ٧:١٨:٠٥ م] DEw: close - dew

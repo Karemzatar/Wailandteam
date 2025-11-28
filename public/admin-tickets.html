@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Tickets</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="admin-header">
+            <h1>Admin Dashboard</h1>
+            <a href="Tickets.html" class="btn btn-secondary">Back to Main</a>
+        </div>
+        
+        <div class="card">
+            <h2>All Tickets</h2>
+            <div id="ticketsList" class="tickets-grid">
+                <div style="text-align: center; padding: 40px;">
+                    <p>Loading tickets...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Claim Ticket Modal -->
+    <div id="claimModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 15px; min-width: 300px;">
+            <h3>Claim Ticket</h3>
+            <div class="form-group">
+                <label for="adminName">Your Admin Name:</label>
+                <input type="text" id="adminName" class="form-control" placeholder="Enter your name">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="confirmClaim" class="btn">Claim Ticket</button>
+                <button id="cancelClaim" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

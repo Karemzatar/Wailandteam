@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Ticket</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1 style="text-align: center; margin-bottom: 30px;">Create Support Ticket</h1>
+            
+            <form id="ticketForm" class="ticket-form">
+                <div class="form-group">
+                    <label for="username">Username *</label>
+                    <input type="text" id="username" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="number">Phone Number (Optional)</label>
+                    <input type="tel" id="number" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label for="type">Ticket Type *</label>
+                    <select id="type" class="form-control" required>
+                        <option value="">Select a type</option>
+                        <option value="technical">Make Order</option>
+                        <option value="billing">Technical Support </option>
+                        <option value="general">Billing Issue</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <input type="text" id="subject" class="form-control" required placeholder="Brief description of your issue">
+                </div>
+                
+                <div style="text-align: center;">
+                    <button type="submit" class="btn">Create Ticket</button>
+                    <a href="Tickets.html" class="btn btn-secondary" style="margin-left: 10px;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/create-ticket.js"></script>
+</body>
+</html>
