@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wailand Team - Careers</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* -------------------- RESET -------------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+        }
+
+        body {
+            background: #0e0e17;
+            color: #e9e9ff;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        /* -------------------- HEADER -------------------- */
+        header {
+            background: rgba(25, 25, 45, 0.92);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: #7a82ff;
+        }
+
+        .nav-links a {
+            margin-left: 18px;
+            text-decoration: none;
+            color: #e6e6ff;
+            background: rgba(255,255,255,0.05);
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(122,130,255,0.25);
+            color: #fff;
+        }
+
+        /* -------------------- HERO -------------------- */
+        .hero {
+            text-align: center;
+            padding: 110px 20px 80px;
+            background: linear-gradient(135deg, #0f0f1a 0%, #17172b 100%);
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #7a82ff, #3bd1ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #c8c8ff;
+        }
+
+        /* -------------------- JOB GRID -------------------- */
+        .jobs-section {
+            padding: 60px 0;
+        }
+
+        .jobs-section h2 {
+            text-align: center;
+            font-size: 2.6rem;
+            margin-bottom: 40px;
+            color: #9aa0ff;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .job-card {
+            background: rgba(25, 25, 45, 0.95);
+            padding: 25px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.09);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-card:hover {
+            transform: translateY(-6px);
+            border-color: #7a82ff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        .job-title {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            color: #7a82ff;
+        }
+
+        .job-card p {
+            margin-bottom: 6px;
+            color: #dcdcff;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: #7a82ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #6971ff;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- -------------------- HEADER -------------------- -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    Wailand Team
+                </div>
+
+                <div class="nav-links">
+                    <a href="#hero">الصفحة الرئيسية</a>
+                    <a href="#jobs">الوظائف</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- -------------------- HERO -------------------- -->
+    <section id="hero" class="hero">
+        <div class="container">
+            <h1>انضم إلى فريق Wailand</h1>
+            <p>كن جزءًا من رحلتنا نحو بناء مستقبل رقمي آمن</p>
+        </div>
+    </section>
+
+    <!-- -------------------- JOBS -------------------- -->
+    <section id="jobs" class="jobs-section">
+        <div class="container">
+            <h2>الوظائف المتاحة</h2>
+
+            <div class="jobs-grid" id="jobsGrid">
+                <!-- القائمة يتم تحميلها تلقائياً -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // -------------------- Load Jobs From Server --------------------
+        async function loadJobs() {
+            try {
+                const response = await fetch('/api/careers/jobs');
+                const jobs = await response.json();
+                renderJobs(jobs);
+            } catch (error) {
+                console.error("Error loading jobs:", error);
+                document.getElementById("jobsGrid").innerHTML =
+                    '<p style="text-align:center;color:#ff4d4d;">حدث خطأ أثناء تحميل الوظائف</p>';
+            }
+        }
+
+        // -------------------- Render Job Cards --------------------
+        function renderJobs(jobs) {
+            const jobsGrid = document.getElementById("jobsGrid");
+
+            if (!jobs.length) {
+                jobsGrid.innerHTML = `<p style="text-align:center;">لا توجد وظائف متاحة حالياً</p>`;
+                return;
+            }
+
+            jobsGrid.innerHTML = jobs
+                .map(
+                    (job) => `
+                <div class="job-card">
+                    <h3 class="job-title">${job.title}</h3>
+                    <p><strong>القسم:</strong> ${job.department}</p>
+                    <p><strong>الموقع:</strong> ${job.location}</p>
+                    <p><strong>نوع العمل:</strong> ${job.employmentType}</p>
+                    <p style="margin-top:10px;">${job.description}</p>
+                    <a class="btn" onclick="applyForJob('${job.id}')">قدّم الآن</a>
+                </div>
+            `
+                )
+                .join("");
+        }
+
+        function applyForJob(id) {
+            alert("سيتم فتح نموذج التقديم للوظيفة رقم: " + id);
+        }
+
+        document.addEventListener("DOMContentLoaded", loadJobs);
+    </script>
+
+</body>
+</html>

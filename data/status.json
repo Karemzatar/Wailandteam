@@ -1,0 +1,16 @@
+{
+  "services": [
+    {
+      "id": 1764322170647,
+      "name": "Wailand Team",
+      "url": "https://github.com/Karemzatar/Wailandteam",
+      "status": "degraded",
+      "responseTime": 1025,
+      "lastChecked": "2025-12-04T13:45:45.052Z"
+    }
+  ],
+  "settings": {
+    "adminPassword": "wailandadmin",
+    "checkInterval": 60000
+  }
+}

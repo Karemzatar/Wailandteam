@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Monitoring System - Wailand Uptime</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7a82ff;
+            --secondary: #3bd1ff;
+            --success: #2ed573;
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --dark: #0f0f1a;
+            --light: #e6e6ff;
+            --gray: #a0a0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+            color: #e6e6ff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(122, 130, 255, 0.1), rgba(59, 209, 255, 0.1));
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .admin-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--light);
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            background: rgba(122, 130, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(122, 130, 255, 0.3);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: rgba(25, 25, 45, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-card.operational i {
+            color: var(--success);
+        }
+
+        .stat-card.down i {
+            color: var(--danger);
+        }
+
+        .stat-card.degraded i {
+            color: var(--warning);
+        }
+
+        .stat-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .services {
+            background: rgba(25, 25, 45, 0.9);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .services-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 15, 35, 0.6);
+        }
+
+        .services-header h2 {
+            color: var(--light);
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-operational {
+            background: rgba(46, 213, 115, 0.2);
+            color: var(--success);
+            border: 1px solid rgba(46, 213, 115, 0.3);
+        }
+
+        .status-down {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--danger);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        .status-degraded {
+            background: rgba(255, 165, 2, 0.2);
+            color: var(--warning);
+            border: 1px solid rgba(255, 165, 2, 0.3);
+        }
+
+        .service-list {
+            list-style: none;
+        }
+
+        .service-item {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .service-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+        }
+
+        .service-info {
+            flex: 1;
+        }
+
+        .service-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .service-url {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .service-status {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .response-time {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: rgba(25, 25, 45, 0.95);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-header {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(122, 130, 255, 0.1), rgba(59, 209, 255, 0.1));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: var(--secondary);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            color: var(--light);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(122, 130, 255, 0.2);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(122, 130, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(122, 130, 255, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, var(--danger), #ff3742);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--gray);
+            transition: color 0.3s ease;
+            padding: 5px;
+        }
+
+        .action-btn.edit:hover {
+            color: var(--primary);
+        }
+
+        .action-btn.delete:hover {
+            color: var(--danger);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            color: var(--gray);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .service-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .service-status {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span class="logo-text">Wailand Uptime</span>
+                </div>
+                <button class="admin-btn" id="adminBtn">
+                    <i class="fas fa-cog"></i>
+                    <span>Management</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="stats">
+            <div class="stat-card operational">
+                <i class="fas fa-check-circle"></i>
+                <h3 id="operationalCount">0</h3>
+                <p>Operational Services</p>
+            </div>
+            <div class="stat-card down">
+                <i class="fas fa-times-circle"></i>
+                <h3 id="downCount">0</h3>
+                <p>Down Services</p>
+            </div>
+            <div class="stat-card degraded">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3 id="degradedCount">0</h3>
+                <p>Degraded Services</p>
+            </div>
+        </div>
+
+        <div class="services">
+            <div class="services-header">
+                <h2>Monitored Services</h2>
+                <div>
+                    <span class="status-badge status-operational" id="overallStatus">Good</span>
+                </div>
+            </div>
+            <ul class="service-list" id="serviceList">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>All rights reserved &copy; 2023 Service Monitoring System - Wailand Team</p>
+        </div>
+    </footer>
+
+    <!-- Authentication window -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Authentication</h3>
+                <button class="close-btn" id="closeAuthModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" class="form-control" placeholder="Enter password">
+                </div>
+                <button class="btn btn-primary btn-block" id="authSubmit">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service management window -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Service Management</h3>
+                <button class="close-btn" id="closeAdminModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="serviceForm">
+                    <input type="hidden" id="serviceId">
+                    <div class="form-group">
+                        <label for="serviceName">Service Name:</label>
+                        <input type="text" id="serviceName" class="form-control" placeholder="Enter service name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceUrl">Service URL:</label>
+                        <input type="url" id="serviceUrl" class="form-control" placeholder="https://example.com" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" id="saveService">Save Service</button>
+                </form>
+
+                <div id="servicesListAdmin" style="margin-top: 20px;">
+                    <!-- Services list for management -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const adminBtn = document.getElementById('adminBtn');
+        const authModal = document.getElementById('authModal');
+        const adminModal = document.getElementById('adminModal');
+        const closeAuthModal = document.getElementById('closeAuthModal');
+        const closeAdminModal = document.getElementById('closeAdminModal');
+        const authSubmit = document.getElementById('authSubmit');
+        const passwordInput = document.getElementById('password');
+        const serviceForm = document.getElementById('serviceForm');
+        const serviceList = document.getElementById('serviceList');
+        const servicesListAdmin = document.getElementById('servicesListAdmin');
+        const operationalCount = document.getElementById('operationalCount');
+        const downCount = document.getElementById('downCount');
+        const degradedCount = document.getElementById('degradedCount');
+        const overallStatus = document.getElementById('overallStatus');
+
+        // Server base URL
+        const API_BASE = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000' 
+            : window.location.origin;
+
+        // Open authentication modal
+        adminBtn.addEventListener('click', () => {
+            authModal.style.display = 'flex';
+            passwordInput.focus();
+        });
+
+        // Close authentication modal
+        closeAuthModal.addEventListener('click', () => {
+            authModal.style.display = 'none';
+            passwordInput.value = '';
+        });
+
+        // Close admin modal
+        closeAdminModal.addEventListener('click', () => {
+            adminModal.style.display = 'none';
+            resetForm();
+        });
+
+        // Verify password
+        authSubmit.addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: passwordInput.value
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    authModal.style.display = 'none';
+                    adminModal.style.display = 'flex';
+                    passwordInput.value = '';
+                    renderAdminServices();
+                } else {
+                    alert('Incorrect password!');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            } catch (error) {
+                console.error('Authentication error:', error);
+                alert('Error connecting to server');
+            }
+        });
+
+        // Submit service form
+        serviceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const serviceId = document.getElementById('serviceId').value;
+            const serviceName = document.getElementById('serviceName').value;
+            const serviceUrl = document.getElementById('serviceUrl').value;
+            
+            try {
+                if (serviceId) {
+                    // Edit existing service
+                    await fetch(`${API_BASE}/api/services/${serviceId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: serviceName,
+                            url: serviceUrl
+                        })
+                    });
+                } else {
+                    // Add new service
+                    await fetch(`${API_BASE}/api/services`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: serviceName,
+                            url: serviceUrl
+                        })
+                    });
+                }
+                
+                await loadServices();
+                renderAdminServices();
+                resetForm();
+            } catch (error) {
+                console.error('Error saving service:', error);
+                alert('Error saving service');
+            }
+        });
+
+        // Load services from server
+        async function loadServices() {
+            try {
+                const response = await fetch(`${API_BASE}/api/services`);
+                const services = await response.json();
+                renderServices(services);
+            } catch (error) {
+                console.error('Error loading services:', error);
+                serviceList.innerHTML = '<li class="service-item">Error loading services</li>';
+            }
+        }
+
+        // Render services in main interface
+        function renderServices(services) {
+            serviceList.innerHTML = '';
+
+            if (services.length === 0) {
+                serviceList.innerHTML = '<li class="service-item">No services added yet</li>';
+                updateStats(services);
+                return;
+            }
+
+            services.forEach(service => {
+                const statusText = service.status === 'operational' ? 'Operational' :
+                                 service.status === 'down' ? 'Down' : 'Degraded';
+
+                const statusClass = service.status === 'operational' ? 'status-operational' :
+                                  service.status === 'down' ? 'status-down' : 'status-degraded';
+
+                const responseTimeText = service.responseTime > 0 ? `${service.responseTime} ms` : 'Not available';
+
+                const serviceItem = document.createElement('li');
+                serviceItem.className = 'service-item';
+                serviceItem.innerHTML = `
+                    <div class="service-icon">
+                        <i class="fas ${getServiceIcon(service.url)}"></i>
+                    </div>
+                    <div class="service-info">
+                        <div class="service-name">${service.name}</div>
+                        <div class="service-url">${service.url}</div>
+                    </div>
+                    <div class="service-status">
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        <div class="response-time">${responseTimeText}</div>
+                    </div>
+                `;
+                
+                serviceList.appendChild(serviceItem);
+            });
+            
+            updateStats(services);
+        }
+
+        // Render services in admin interface
+        async function renderAdminServices() {
+            try {
+                const response = await fetch(`${API_BASE}/api/services`);
+                const services = await response.json();
+                
+                servicesListAdmin.innerHTML = '';
+
+                if (services.length === 0) {
+                    servicesListAdmin.innerHTML = '<p>No services added yet.</p>';
+                    return;
+                }
+
+                services.forEach(service => {
+                    const serviceElement = document.createElement('div');
+                    serviceElement.className = 'service-item';
+                    serviceElement.innerHTML = `
+                        <div class="service-info">
+                            <div class="service-name">${service.name}</div>
+                            <div class="service-url">${service.url}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="action-btn edit" data-id="${service.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" data-id="${service.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+
+                    servicesListAdmin.appendChild(serviceElement);
+                });
+
+                // Add event listeners for buttons
+                document.querySelectorAll('.action-btn.edit').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const serviceId = e.currentTarget.getAttribute('data-id');
+                        editService(serviceId, services);
+                    });
+                });
+
+                document.querySelectorAll('.action-btn.delete').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const serviceId = e.currentTarget.getAttribute('data-id');
+                        deleteService(serviceId);
+                    });
+                });
+            } catch (error) {
+                console.error('Error loading services for management:', error);
+                servicesListAdmin.innerHTML = '<p>Error loading services</p>';
+            }
+        }
+
+        // Edit service
+        function editService(id, services) {
+            const service = services.find(s => s.id == id);
+            if (service) {
+                document.getElementById('serviceId').value = service.id;
+                document.getElementById('serviceName').value = service.name;
+                document.getElementById('serviceUrl').value = service.url;
+            }
+        }
+
+        // Delete service
+        async function deleteService(id) {
+            if (confirm('Are you sure you want to delete this service?')) {
+                try {
+                    await fetch(`${API_BASE}/api/services/${id}`, {
+                        method: 'DELETE'
+                    });
+
+                    await loadServices();
+                    renderAdminServices();
+                } catch (error) {
+                    console.error('Error deleting service:', error);
+                    alert('Error deleting service');
+                }
+            }
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('serviceId').value = '';
+            document.getElementById('serviceName').value = '';
+            document.getElementById('serviceUrl').value = '';
+        }
+
+        // Update statistics
+        function updateStats(services) {
+            const operational = services.filter(s => s.status === 'operational').length;
+            const down = services.filter(s => s.status === 'down').length;
+            const degraded = services.filter(s => s.status === 'degraded').length;
+            
+            operationalCount.textContent = operational;
+            downCount.textContent = down;
+            degradedCount.textContent = degraded;
+            
+            // Update overall status
+            if (down > 0) {
+                overallStatus.textContent = 'Down';
+                overallStatus.className = 'status-badge status-down';
+            } else if (degraded > 0) {
+                overallStatus.textContent = 'Degraded';
+                overallStatus.className = 'status-badge status-degraded';
+            } else {
+                overallStatus.textContent = 'Good';
+                overallStatus.className = 'status-badge status-operational';
+            }
+        }
+
+        // Get appropriate icon for service
+        function getServiceIcon(url) {
+            if (url.includes('google')) return 'fa-google';
+            if (url.includes('facebook')) return 'fa-facebook';
+            if (url.includes('twitter')) return 'fa-twitter';
+            if (url.includes('github')) return 'fa-github';
+            if (url.includes('youtube')) return 'fa-youtube';
+            if (url.includes('linkedin')) return 'fa-linkedin';
+            if (url.includes('instagram')) return 'fa-instagram';
+            return 'fa-globe';
+        }
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            loadServices();
+            
+            // Update services every minute
+            setInterval(loadServices, 60000);
+        });
+    </script>
+</body>
+</html>

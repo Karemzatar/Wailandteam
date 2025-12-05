@@ -1,44 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
 
-  <!-- Genral Info عامة -->
+  <!-- ========================== -->
+  <!-- 🔹 General Info | معلومات عامة -->
+  <!-- ========================== -->
   <general>
     <siteName>Wailand Team</siteName>
     <siteURL>https://wailand.ct.ws/</siteURL>
-    <language>en</language>
-    <timezone>Asia/United Arab Emirates</timezone>
-    <currency>SAR</currency>
+    <language>ar</language>
+    <timezone>Asia/Dubai</timezone>
+    <currency>AED</currency>
   </general>
 
-  <!-- بيانات الاتصال -->
+  <!-- ========================== -->
+  <!-- 🔹 Contact Info | بيانات الاتصال -->
+  <!-- ========================== -->
   <contact>
-    <phone>+972 59 270 8000</phone>
+    <phone>+971-59-270-8000</phone>
     <email>info@wailand.com</email>
-    <address>اسيا/الاتحاد العربي الاماراتي</address>
-    <fax>+966-11-1234567</fax>
+    <address>الإمارات العربية المتحدة</address>
+    <fax>+971-4-1234567</fax>
   </contact>
 
-  <!-- إعدادات SEO -->
+  <!-- ========================== -->
+  <!-- 🔹 SEO Settings -->
+  <!-- ========================== -->
   <seo>
-    <metaDescription></metaDescription>
-    <metaKeywords>تقنية, برمجة, تطوير مواقع, حلول تقنية</metaKeywords>
-    <googleAnalyticsID>UA-12345678-9</googleAnalyticsID>
+    <metaDescription>
+      ويلاند تيم — شركة تقنية تقدم حلول برمجية، تطوير مواقع، تجارة إلكترونية، واستضافة عالية الأداء.
+    </metaDescription>
+    <metaKeywords>
+      تقنية, برمجة, تطوير مواقع, حلول تقنية, تجارة إلكترونية, استضافة, تصميم مواقع
+    </metaKeywords>
+    <googleAnalyticsID>G-XXXXXXXXXX</googleAnalyticsID>
   </seo>
 
-  <!-- إعدادات الشبكات الاجتماعية -->
+  <!-- ========================== -->
+  <!-- 🔹 Social Media Links -->
+  <!-- ========================== -->
   <social>
-    <facebook>https://facebook.com/futuretech</facebook>
-    <twitter>https://twitter.com/futuretech</twitter>
-    <linkedin>https://linkedin.com/company/futuretech</linkedin>
-    <instagram>https://instagram.com/futuretech</instagram>
+    <facebook>https://facebook.com/wailand</facebook>
+    <twitter>https://twitter.com/wailand</twitter>
+    <linkedin>https://linkedin.com/company/wailand</linkedin>
+    <instagram>https://instagram.com/wailand</instagram>
   </social>
 
-  <!-- إعدادات البريد الإلكتروني -->
+  <!-- ========================== -->
+  <!-- 🔹 Email / SMTP Settings -->
+  <!-- ========================== -->
   <emailSettings>
-    <smtpServer>smtp.futuretech.com</smtpServer>
+    <smtpServer>smtp.wailand.com</smtpServer>
     <smtpPort>587</smtpPort>
-    <smtpUser>noreply@futuretech.com</smtpUser>
-    <smtpPassword>*********</smtpPassword>
+    <smtpUser>info@wailand.com</smtpUser>
+    <smtpPassword>wailandadmin</smtpPassword>
     <useSSL>true</useSSL>
   </emailSettings>
 

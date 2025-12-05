@@ -3,10 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wailand - Admin Dashboard</title>
+    <title>Wailand - Security Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* نفس الـ CSS الموجود في home.html */
+        /* 🎨 CSS Variables for consistent theming */
+        :root {
+            --bg-dark: #0f0f1a;
+            --bg-darker: #1a1a2e;
+            --bg-card: rgba(25, 25, 45, 0.7);
+            --bg-card-hover: rgba(35, 35, 65, 0.9);
+            --primary: #7a82ff;
+            --primary-dark: #5a62df;
+            --secondary: #3bd1ff;
+            --secondary-dark: #1ab1df;
+            --accent: #ff416c;
+            --accent-dark: #df214c;
+            --success: #2ed573;
+            --warning: #ffa502;
+            --danger: #ff4757;
+            --text-light: #e6e6ff;
+            --text-lighter: #a0a0d0;
+            --text-muted: #7a7aaa;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --glow: 0 0 20px rgba(122, 130, 255, 0.3);
+        }
+
+        /* 🔧 Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -14,28 +38,6 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        :root {
-            --bg-dark: #0f0f1a;
-            --bg-darker: #1a1a2e;
-            --bg-card: rgba(25, 25, 45, 0.7);
-            --bg-card-hover: rgba(35, 35, 65, 0.9);
-            --primary: #7a82ff;
-            --primary-dark: #5a62df;
-            --secondary: #3bd1ff;
-            --secondary-dark: #1ab1df;
-            --accent: #ff416c;
-            --accent-dark: #df214c;
-            --success: #2ed573;
-            --warning: #ffa502;
-            --danger: #ff4757;
-            --text-light: #e6e6ff;
-            --text-lighter: #a0a0d0;
-            --text-muted: #7a7aaa;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
-        }
-
         body {
             background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
             color: var(--text-light);
@@ -43,43 +45,7 @@
             overflow-x: hidden;
         }
 
-         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --bg-dark: #0f0f1a;
-            --bg-darker: #1a1a2e;
-            --bg-card: rgba(25, 25, 45, 0.7);
-            --bg-card-hover: rgba(35, 35, 65, 0.9);
-            --primary: #7a82ff;
-            --primary-dark: #5a62df;
-            --secondary: #3bd1ff;
-            --secondary-dark: #1ab1df;
-            --accent: #ff416c;
-            --accent-dark: #df214c;
-            --success: #2ed573;
-            --warning: #ffa502;
-            --danger: #ff4757;
-            --text-light: #e6e6ff;
-            --text-lighter: #a0a0d0;
-            --text-muted: #7a7aaa;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
-            color: var(--text-light);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Loading Screen */
+        /* 🔄 Loading Screen */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -109,13 +75,50 @@
             color: var(--text-lighter);
             font-size: 1.1rem;
         }
+          .ai-assistant-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #7a82ff 0%, #3bd1ff 100%);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(122, 130, 255, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .ai-assistant-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(122, 130, 255, 0.6);
+        }
+
+        .ai-assistant-btn i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(122, 130, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(122, 130, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(122, 130, 255, 0); }
+        }
+
+        .ai-assistant-btn.pulse {
+            animation: pulse 2s infinite;
+        }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* Navigation */
+        /* 🧭 Navigation */
         .navbar {
             background: rgba(25, 25, 45, 0.95);
             backdrop-filter: blur(15px);
@@ -146,6 +149,7 @@
             font-size: 2rem;
             color: var(--primary);
             background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -154,6 +158,7 @@
             font-size: 1.8rem;
             font-weight: 800;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -301,14 +306,14 @@
             transform: translateY(-2px);
         }
 
-        /* Main Container */
+        /* 📦 Main Container */
         .container {
-            max-width: 1600px;
+            max-width: 1800px;
             margin: 0 auto;
             padding: 30px;
         }
 
-        /* Welcome Section */
+        /* 🏠 Welcome Section */
         .welcome-section {
             background: var(--bg-card);
             backdrop-filter: blur(10px);
@@ -342,6 +347,7 @@
             font-size: 2.5rem;
             margin-bottom: 15px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1.2;
@@ -355,7 +361,8 @@
         }
 
         .welcome-stats {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 30px;
             margin-top: 30px;
         }
@@ -363,25 +370,38 @@
         .welcome-stat {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background: rgba(35, 35, 60, 0.5);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .welcome-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(122, 130, 255, 0.3);
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--primary);
             line-height: 1;
+            margin-bottom: 8px;
         }
 
         .stat-label {
             font-size: 0.9rem;
             color: var(--text-lighter);
-            margin-top: 5px;
         }
 
-        /* Dashboard Grid */
+        /* 📊 Dashboard Grid */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 25px;
             margin-bottom: 40px;
         }
@@ -442,7 +462,7 @@
             justify-content: center;
             font-size: 1.4rem;
             color: white;
-            box-shadow: 0 4px 15px rgba(122, 130, 255, 0.3);
+            box-shadow: var(--glow);
         }
 
         .card-title {
@@ -507,921 +527,154 @@
             margin-top: 5px;
         }
 
-        /* Sections */
-        .section {
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 40px;
-            box-shadow: var(--shadow);
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-title i {
-            color: var(--primary);
-        }
-
-        .section-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .section-btn {
-            background: rgba(122, 130, 255, 0.1);
-            color: var(--primary);
-            border: 1px solid rgba(122, 130, 255, 0.3);
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .section-btn:hover {
-            background: rgba(122, 130, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* Profile Section */
-        .profile-container {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 30px;
-        }
-
-        .profile-sidebar {
-            background: rgba(35, 35, 60, 0.5);
-            border-radius: 12px;
-            padding: 25px;
-            border: 1px solid var(--border-color);
-        }
-
-        .profile-avatar-large {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
+        /* 🍪 Cookie Banner Styles */
+        .cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 500px;
+            background: #2c3e50;
             color: white;
-            margin: 0 auto 20px;
-            border: 4px solid var(--border-color);
-        }
-
-        .profile-name {
-            text-align: center;
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .profile-role {
-            text-align: center;
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .profile-stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 25px 0;
-            padding: 20px 0;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .profile-stat {
-            text-align: center;
-        }
-
-        .profile-stat-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .profile-stat-label {
-            font-size: 0.8rem;
-            color: var(--text-lighter);
-            margin-top: 5px;
-        }
-
-        .profile-main {
-            background: rgba(35, 35, 60, 0.5);
-            border-radius: 12px;
-            padding: 25px;
-            border: 1px solid var(--border-color);
-        }
-
-        .profile-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-        }
-
-        .profile-tab {
-            background: transparent;
-            border: none;
-            color: var(--text-lighter);
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .profile-tab.active {
-            background: rgba(122, 130, 255, 0.1);
-            color: var(--primary);
-        }
-
-        .profile-tab-content {
-            display: none;
-        }
-
-        .profile-tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-light);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-light);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(122, 130, 255, 0.05);
-            box-shadow: 0 0 0 2px rgba(122, 130, 255, 0.2);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .submit-btn {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(122, 130, 255, 0.4);
-        }
-
-        .submit-btn:disabled {
-            background: var(--text-muted);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Notifications Section */
-        .notifications-container {
-            background: rgba(35, 35, 60, 0.5);
-            border-radius: 12px;
-            padding: 25px;
-            border: 1px solid var(--border-color);
-        }
-
-        .notification-form {
-            margin-bottom: 30px;
             padding: 20px;
-            background: rgba(25, 25, 45, 0.5);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            animation: slideUp 0.6s ease-out;
         }
 
-        .notification-list {
-            max-height: 500px;
-            overflow-y: auto;
+        .cookie-content h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.3rem;
+            color: #ecf0f1;
         }
 
-        .notification-item {
-            background: rgba(25, 25, 45, 0.5);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-left: 4px solid var(--primary);
-            transition: all 0.3s ease;
-        }
-
-        .notification-item:hover {
-            background: rgba(25, 25, 45, 0.7);
-            transform: translateX(5px);
-        }
-
-        .notification-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .notification-title {
-            font-weight: 600;
-            color: var(--text-light);
-        }
-
-        .notification-time {
-            font-size: 0.8rem;
-            color: var(--text-lighter);
-        }
-
-        .notification-message {
-            color: var(--text-lighter);
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        /* Tools Section */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .tool-card {
-            background: rgba(35, 35, 60, 0.7);
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tool-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(122, 130, 255, 0.3);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .tool-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .tool-icon {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tool-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--text-light);
-        }
-
-        .tool-desc {
-            color: var(--text-lighter);
-            font-size: 0.9rem;
-            margin-bottom: 20px;
+        .cookie-content p {
+            margin: 0 0 20px 0;
             line-height: 1.5;
+            color: #bdc3c7;
+            font-size: 0.95rem;
         }
 
-        .tool-status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 15px;
+        .cookie-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        .status-online {
-            background: rgba(46, 213, 115, 0.2);
-            color: var(--success);
-        }
-
-        .status-offline {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--danger);
-        }
-
-        .status-warning {
-            background: rgba(255, 165, 2, 0.2);
-            color: var(--warning);
-        }
-
-        .tool-btn {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
+        .cookie-btn {
+            padding: 12px 24px;
             border: none;
-            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
-            font-weight: 600;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            flex: 1;
+            min-width: 120px;
         }
 
-        .tool-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(122, 130, 255, 0.4);
-        }
-
-        .tool-btn:disabled {
-            background: var(--text-muted);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Users Section */
-        .users-table-container {
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 800px;
-        }
-
-        .users-table th {
-            background: rgba(35, 35, 60, 0.7);
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            color: var(--primary);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .users-table td {
-            padding: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .users-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .users-table tr:hover {
-            background: rgba(122, 130, 255, 0.05);
-        }
-
-        .user-avatar-small {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+        .cookie-btn.accept {
+            background: #27ae60;
             color: white;
-            font-size: 0.9rem;
         }
 
-        .user-info-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .cookie-btn.accept:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
         }
 
-        .user-details-small {
-            display: flex;
-            flex-direction: column;
+        .cookie-btn.reject {
+            background: #e74c3c;
+            color: white;
         }
 
-        .user-name-small {
-            font-weight: 600;
-            font-size: 0.9rem;
+        .cookie-btn.reject:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
         }
 
-        .user-email-small {
-            font-size: 0.8rem;
-            color: var(--text-lighter);
+        .cookie-btn.settings {
+            background: #3498db;
+            color: white;
         }
 
-        .badge {
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        .cookie-btn.settings:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
         }
 
-        .badge-admin {
-            background: rgba(122, 130, 255, 0.2);
-            color: var(--primary);
-        }
-
-        .badge-user {
-            background: rgba(59, 209, 255, 0.2);
-            color: var(--secondary);
-        }
-
-        .badge-active {
-            background: rgba(46, 213, 115, 0.2);
-            color: var(--success);
-        }
-
-        .badge-inactive {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--danger);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .btn-primary {
-            background: rgba(122, 130, 255, 0.2);
-            color: var(--primary);
-            border: 1px solid rgba(122, 130, 255, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: rgba(122, 130, 255, 0.3);
-        }
-
-        .btn-danger {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--danger);
-            border: 1px solid rgba(255, 71, 87, 0.3);
-        }
-
-        .btn-danger:hover {
-            background: rgba(255, 71, 87, 0.3);
-        }
-
-        .btn-success {
-            background: rgba(46, 213, 115, 0.2);
-            color: var(--success);
-            border: 1px solid rgba(46, 213, 115, 0.3);
-        }
-
-        .btn-success:hover {
-            background: rgba(46, 213, 115, 0.3);
-        }
-
-        /* Notification */
-        .notification {
+        /* 🔔 Notification */
+        .cookie-notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 16px 20px;
-            border-radius: 12px;
-            background: var(--bg-card);
-            border-left: 4px solid var(--primary);
-            color: var(--text-light);
-            box-shadow: var(--shadow-hover);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            max-width: 400px;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.error {
-            border-left-color: var(--danger);
-        }
-
-        .notification.success {
-            border-left-color: var(--success);
-        }
-
-        .notification.warning {
-            border-left-color: var(--warning);
-        }
-
-        .notification-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .notification-title {
+            background: #27ae60;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10001;
+            animation: fadeIn 0.5s ease;
             font-weight: 600;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .notification-close {
-            background: none;
-            border: none;
-            color: var(--text-lighter);
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 4px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
+        /* 🎬 Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
         }
 
-        .notification-close:hover {
-            color: var(--text-light);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .notification-message {
-            font-size: 0.9rem;
-            color: var(--text-lighter);
-            line-height: 1.4;
-        }
-
-        /* Modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background: var(--bg-card);
-            backdrop-filter: blur(15px);
-            border-radius: 16px;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-hover);
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .modal.show .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .modal-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--text-light);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-lighter);
-            cursor: pointer;
-            font-size: 1.3rem;
-            padding: 5px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .modal-close:hover {
-            color: var(--text-light);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Switch */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--primary);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .animate-fadeIn {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        .animate-pulse {
-            animation: pulse 2s infinite;
-        }
-
-        .animate-slideInRight {
-            animation: slideInRight 0.3s ease-out forwards;
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .profile-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .profile-sidebar {
-                order: 2;
-            }
-            
-            .profile-main {
-                order: 1;
-            }
-        }
-
+        /* 📱 Responsive */
         @media (max-width: 768px) {
-            .navbar {
-                padding: 12px 20px;
-                flex-wrap: wrap;
+            .cookie-banner {
+                width: 95%;
+                bottom: 10px;
+                padding: 15px;
             }
 
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: -100%;
+            .cookie-buttons {
+                flex-direction: column;
+            }
+
+            .cookie-btn {
                 width: 100%;
-                height: calc(100vh - 70px);
-                background: var(--bg-dark);
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start;
-                gap: 0;
-                padding-top: 30px;
-                transition: all 0.3s ease;
-                z-index: 999;
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .nav-link {
-                width: 90%;
-                justify-content: flex-start;
-                padding: 15px 20px;
-                margin-bottom: 10px;
-            }
-
-            .user-menu {
-                order: -1;
-                width: 100%;
-                justify-content: space-between;
-                margin-bottom: 15px;
-            }
-
-            .container {
-                padding: 20px;
-            }
-
-            .welcome-section {
-                padding: 30px 20px;
-            }
-
-            .welcome-title {
-                font-size: 2rem;
-            }
-
-            .welcome-stats {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .section-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .profile-stats {
-                flex-direction: column;
-                gap: 15px;
             }
         }
 
-        @media (max-width: 480px) {
-            .welcome-title {
-                font-size: 1.8rem;
-            }
-
-            .card-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .card-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .tools-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-content {
-                padding: 20px;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .action-btn {
-                justify-content: center;
-            }
+        /* 🚫 Hide when not needed */
+        .cookie-hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
+    <!-- 🔄 Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-spinner"></div>
-        <div class="loading-text">Loading Admin Dashboard...</div>
+        <div class="loading-text">Loading Wailand Security System...</div>
     </div>
 
-    <!-- Navigation Bar -->
+    <!-- 🧭 Navigation Bar -->
     <nav class="navbar" id="navbar">
         <a href="#" class="logo">
             <i class="fas fa-shield-alt logo-icon"></i>
-            <span class="logo-text">Wailand Admin</span>
+            <span class="logo-text">Wailand</span>
         </a>
         
         <div class="nav-links" id="navLinks">
@@ -1429,22 +682,40 @@
                 <i class="fas fa-th-large"></i>
                 Overview
             </a>
+            <a href="#" class="nav-link" data-section="security">
+                <i class="fas fa-shield-alt"></i>
+                Security
+            </a>
+            <a href="#" class="nav-link" data-section="tools">
+                <i class="fas fa-tools"></i>
+                Tools
+            </a>
             <a href="#" class="nav-link" data-section="users">
                 <i class="fas fa-users"></i>
-                All Users
+                Users
             </a>
-            <a href="#" class="nav-link" data-section="system">
-                <i class="fas fa-cog"></i>
-                System Settings
+            <a href="#" class="nav-link" data-section="notifications">
+                <i class="fas fa-bell"></i>
+                Notifications
+                <span class="nav-badge" id="notificationBadge">3</span>
+            </a>
+            <a href="#" class="nav-link" data-section="profile">
+                <i class="fas fa-user"></i>
+                Profile
             </a>
         </div>
         
         <div class="user-menu">
+            <div class="notification-bell" id="notificationBell">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notificationCount">3</span>
+            </div>
+            
             <div class="user-info" id="userInfo">
-                <div class="user-avatar" id="userAvatar">A</div>
+                <div class="user-avatar" id="userAvatar">U</div>
                 <div class="user-details">
-                    <div class="user-name" id="userName">Admin User</div>
-                    <div class="user-role" id="userRole">Administrator</div>
+                    <div class="user-name" id="userName">User Name</div>
+                    <div class="user-role" id="userRole">User</div>
                 </div>
             </div>
             
@@ -1455,181 +726,510 @@
         </div>
     </nav>
 
-    <!-- Main Container -->
+    <!-- 📦 Main Container -->
     <div class="container">
-        <!-- Admin Dashboard Section -->
+        <!-- 🏠 Dashboard Section -->
         <section class="section active" id="dashboardSection">
+            <!-- Welcome Section -->
             <div class="welcome-section">
                 <div class="welcome-content">
-                    <h1 class="welcome-title">Welcome to Admin Dashboard</h1>
-                    <p class="welcome-subtitle">Manage your security system and monitor all user activities.</p>
+                    <h1 class="welcome-title" id="welcomeMessage">Welcome back, User!</h1>
+                    <p class="welcome-subtitle">Your security systems are running at peak performance. Here's an overview of your security status and recent activities.</p>
                     
                     <div class="welcome-stats">
                         <div class="welcome-stat">
-                            <div class="stat-value" id="totalUsers">0</div>
-                            <div class="stat-label">Total Users</div>
+                            <div class="stat-value" id="totalScans">0</div>
+                            <div class="stat-label">Security Scans Today</div>
                         </div>
                         <div class="welcome-stat">
-                            <div class="stat-value" id="activeScans">0</div>
-                            <div class="stat-label">Active Scans</div>
+                            <div class="stat-value" id="threatsBlocked">0</div>
+                            <div class="stat-label">Threats Blocked</div>
                         </div>
                         <div class="welcome-stat">
-                            <div class="stat-value" id="systemStatus">100%</div>
-                            <div class="stat-label">System Status</div>
+                            <div class="stat-value" id="systemHealth">0%</div>
+                            <div class="stat-label">System Health</div>
                         </div>
                         <div class="welcome-stat">
-                            <div class="stat-value" id="securityLevel">High</div>
-                            <div class="stat-label">Security Level</div>
+                            <div class="stat-value" id="activeTools">0</div>
+                            <div class="stat-label">Active Tools</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Admin Quick Actions -->
-            <div class="dashboard-grid">
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <div class="card-title-section">
-                            <div class="card-icon" style="background: linear-gradient(45deg, var(--success), var(--secondary));">
-                                <i class="fas fa-users-cog"></i>
-                            </div>
-                            <h3 class="card-title">User Management</h3>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        Manage all system users, their permissions and access levels.
-                    </div>
-                    <button class="tool-btn" onclick="switchSection('users')">
-                        <i class="fas fa-users"></i>
-                        Manage Users
-                    </button>
-                </div>
-
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <div class="card-title-section">
-                            <div class="card-icon" style="background: linear-gradient(45deg, var(--warning), var(--accent));">
-                                <i class="fas fa-chart-bar"></i>
-                            </div>
-                            <h3 class="card-title">System Analytics</h3>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        View detailed analytics and reports about system usage and performance.
-                    </div>
-                    <button class="tool-btn">
-                        <i class="fas fa-chart-line"></i>
-                        View Analytics
-                    </button>
-                </div>
-
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <div class="card-title-section">
-                            <div class="card-icon" style="background: linear-gradient(45deg, var(--primary), var(--success));">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <h3 class="card-title">Security Settings</h3>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        Configure global security settings and policies for all users.
-                    </div>
-                    <button class="tool-btn" onclick="switchSection('system')">
-                        <i class="fas fa-cog"></i>
-                        Configure
-                    </button>
-                </div>
+            <!-- 📊 Dashboard Grid -->
+            <div class="dashboard-grid" id="dashboardGrid">
+                <!-- Cards will be populated by JavaScript -->
             </div>
         </section>
+    <a class="ai-assistant-btn pulse" onclick="openAIAssistant()" title="Open AI Assistant" href="/public/ai-assistant.html">
+        <i class="fas fa-robot"></i>
+    </a>
+    </div>
 
-        <!-- Users Management Section -->
-        <section class="section" id="usersSection">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-users"></i> User Management</h2>
-                <div class="section-actions">
-                    <button class="section-btn" id="refreshUsers">
-                        <i class="fas fa-sync-alt"></i>
-                        Refresh
-                    </button>
-                </div>
+    <!-- 🍪 Cookie Banner -->
+    <div class="cookie-banner cookie-hidden" id="cookieBanner">
+        <div class="cookie-content">
+            <h3>🍪 We Use Cookies</h3>
+            <p>We use cookies to improve your experience on our website. By continuing to browse, you agree to our use of cookies.</p>
+            <div class="cookie-buttons">
+                <button class="cookie-btn accept" onclick="CookieManager.acceptAll()">Accept All</button>
+                <button class="cookie-btn reject" onclick="CookieManager.rejectNonEssential()">Reject Non-Essential</button>
+                <button class="cookie-btn settings" onclick="CookieManager.showSettings()">Cookie Settings</button>
             </div>
-            
-            <div class="users-table-container">
-                <table class="users-table">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                            <th>Last Active</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminUsersTable">
-                        <!-- Users will be populated by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- System Settings Section -->
-        <section class="section" id="systemSection">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-cog"></i> System Settings</h2>
-            </div>
-            
-            <div class="profile-container">
-                <div class="profile-main">
-                    <form id="systemSettingsForm">
-                        <div class="form-group">
-                            <label class="form-label">Security Level</label>
-                            <select class="form-control" id="securityLevel">
-                                <option value="low">Low</option>
-                                <option value="medium">Medium</option>
-                                <option value="high" selected>High</option>
-                                <option value="maximum">Maximum</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Auto Scan Frequency</label>
-                            <select class="form-control" id="scanFrequency">
-                                <option value="1">Every Hour</option>
-                                <option value="6">Every 6 Hours</option>
-                                <option value="12" selected>Every 12 Hours</option>
-                                <option value="24">Every 24 Hours</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">User Registration</label>
-                            <div style="margin-top: 10px;">
-                                <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                    <input type="checkbox" id="allowRegistration" checked>
-                                    <span>Allow new user registration</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 10px;">
-                                    <input type="checkbox" id="emailVerification" checked>
-                                    <span>Require email verification</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">
-                            <i class="fas fa-save"></i>
-                            Save Settings
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
+        </div>
     </div>
 
     <script>
-        // Admin Dashboard JavaScript
-        // ... (سيحتوي على كود مشابه لـ home.html لكن مخصص للأدمن)
+        // =============================================
+        // 🍪 COOKIE MANAGER CLASS
+        // =============================================
+        class CookieManager {
+            static init() {
+                console.log("🍪 [CookieManager] Initializing cookie manager...");
+                
+                // Check if user already made a choice
+                if (this.getCookie('cookie_consent')) {
+                    console.log("🍪 [CookieManager] User already made cookie choice:", this.getCookie('cookie_consent'));
+                    return;
+                }
+
+                // Show banner after delay
+                setTimeout(() => {
+                    this.showBanner();
+                    console.log("🍪 [CookieManager] Cookie banner displayed");
+                }, 2000);
+            }
+
+            static showBanner() {
+                const banner = document.getElementById('cookieBanner');
+                if (banner) {
+                    banner.classList.remove('cookie-hidden');
+                    console.log("🍪 [CookieManager] Banner shown to user");
+                }
+            }
+
+            static hideBanner() {
+                const banner = document.getElementById('cookieBanner');
+                if (banner) {
+                    banner.classList.add('cookie-hidden');
+                    console.log("🍪 [CookieManager] Banner hidden");
+                }
+            }
+
+            static setCookie(name, value, days = 365) {
+                console.log(`🍪 [CookieManager] Setting cookie: ${name}=${value}`);
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                const expires = "expires=" + date.toUTCString();
+                document.cookie = `${name}=${value}; ${expires}; path=/; SameSite=Lax`;
+            }
+
+            static getCookie(name) {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    const [cookieName, cookieValue] = cookie.trim().split('=');
+                    if (cookieName === name) {
+                        console.log(`🍪 [CookieManager] Retrieved cookie: ${name}=${cookieValue}`);
+                        return cookieValue;
+                    }
+                }
+                console.log(`🍪 [CookieManager] Cookie not found: ${name}`);
+                return null;
+            }
+
+            static acceptAll() {
+                console.log("✅ [CookieManager] User accepted all cookies");
+                this.setCookie('cookie_consent', 'accepted');
+                this.setCookie('analytics', 'true');
+                this.setCookie('marketing', 'true');
+                this.setCookie('preferences', 'true');
+                
+                this.hideBanner();
+                this.showNotification('All cookies accepted! Thank you 🍪');
+                this.enableAllServices();
+            }
+
+            static rejectNonEssential() {
+                console.log("❌ [CookieManager] User rejected non-essential cookies");
+                this.setCookie('cookie_consent', 'necessary');
+                this.setCookie('analytics', 'false');
+                this.setCookie('marketing', 'false');
+                this.setCookie('preferences', 'false');
+                
+                this.hideBanner();
+                this.showNotification('Non-essential cookies rejected ✅');
+                this.enableEssentialOnly();
+            }
+
+            static showSettings() {
+                console.log("⚙️ [CookieManager] Showing cookie settings");
+                const settings = `
+Current Cookie Settings:
+
+🔵 Essential Cookies: Required for website functionality (cannot be disabled)
+
+📊 Analytics Cookies: ${this.getCookie('analytics') === 'true' ? '✅ Enabled' : '❌ Disabled'}
+📢 Marketing Cookies: ${this.getCookie('marketing') === 'true' ? '✅ Enabled' : '❌ Disabled'}
+⚙️ Preference Cookies: ${this.getCookie('preferences') === 'true' ? '✅ Enabled' : '❌ Disabled'}
+
+To change settings, clear cookies and reload the page.
+                `;
+                alert(settings);
+            }
+
+            static showNotification(message) {
+                console.log("🔔 [CookieManager] Showing notification:", message);
+                
+                // Remove any existing notifications
+                const existingNotification = document.querySelector('.cookie-notification');
+                if (existingNotification) {
+                    existingNotification.remove();
+                }
+
+                // Create new notification
+                const notification = document.createElement('div');
+                notification.className = 'cookie-notification';
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                // Remove notification after 4 seconds
+                setTimeout(() => {
+                    notification.remove();
+                    console.log("🔔 [CookieManager] Notification removed");
+                }, 4000);
+            }
+
+            static enableEssentialOnly() {
+                console.log("🔵 [CookieManager] Enabling essential services only");
+                // Essential website functionality
+            }
+
+            static enableAllServices() {
+                console.log("🎯 [CookieManager] Enabling all services");
+                if (this.getCookie('analytics') === 'true') {
+                    console.log("📊 [CookieManager] Enabling analytics services");
+                    // Google Analytics code would go here
+                }
+                if (this.getCookie('marketing') === 'true') {
+                    console.log("📢 [CookieManager] Enabling marketing services");
+                    // Facebook Pixel code would go here
+                }
+            }
+
+            static showAllCookies() {
+                console.log("🍪 [CookieManager] All current cookies:");
+                document.cookie.split(';').forEach(cookie => {
+                    console.log('  ', cookie.trim());
+                });
+            }
+        }
+
+        // =============================================
+        // 🚀 APPLICATION MANAGER CLASS
+        // =============================================
+        class AppManager {
+            static currentUser = {};
+            static dashboardData = {};
+            static isInitialized = false;
+
+            static async initialize() {
+                console.log("🚀 [AppManager] Starting application initialization...");
+                
+                if (this.isInitialized) {
+                    console.warn("⚠️ [AppManager] App already initialized, skipping...");
+                    return;
+                }
+
+                try {
+                    // Initialize cookie manager first
+                    CookieManager.init();
+                    console.log("✅ [AppManager] Cookie manager initialized");
+
+                    // Load user data
+                    await this.loadUserData();
+                    console.log("✅ [AppManager] User data loaded");
+
+                    // Load dashboard data
+                    await this.loadDashboardData();
+                    console.log("✅ [AppManager] Dashboard data loaded");
+
+                    // Setup event listeners
+                    this.setupEventListeners();
+                    console.log("✅ [AppManager] Event listeners setup");
+
+                    // Update UI
+                    this.updateUI();
+                    console.log("✅ [AppManager] UI updated");
+
+                    // Hide loading screen
+                    this.hideLoadingScreen();
+                    console.log("✅ [AppManager] Loading screen hidden");
+
+                    this.isInitialized = true;
+                    console.log("🎉 [AppManager] Application fully initialized!");
+
+                } catch (error) {
+                    console.error("❌ [AppManager] Initialization failed:", error);
+                    this.showError("Failed to initialize application");
+                }
+            }
+
+            static async loadUserData() {
+                console.log("👤 [AppManager] Loading user data...");
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                this.currentUser = {
+                    id: 1,
+                    name: 'Alex Johnson',
+                    email: 'alex.johnson@wailand.com',
+                    role: 'Administrator',
+                    avatar: 'A'
+                };
+                console.log("👤 [AppManager] User data loaded:", this.currentUser.name);
+            }
+
+            static async loadDashboardData() {
+                console.log("📊 [AppManager] Loading dashboard data...");
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                this.dashboardData = {
+                    totalScans: this.randomInt(150, 300),
+                    threatsBlocked: this.randomInt(20, 50),
+                    systemHealth: this.randomInt(85, 99),
+                    activeTools: this.randomInt(5, 12),
+                    securityScore: this.randomInt(80, 95)
+                };
+                console.log("📊 [AppManager] Dashboard data loaded:", this.dashboardData);
+            }
+
+            static setupEventListeners() {
+                console.log("🎯 [AppManager] Setting up event listeners...");
+                
+                // Navigation links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const section = e.target.closest('.nav-link').getAttribute('data-section');
+                        console.log(`🧭 [AppManager] Navigation clicked: ${section}`);
+                        this.switchSection(section);
+                    });
+                });
+
+                // Logout button
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    console.log("🚪 [AppManager] Logout initiated");
+                    this.logout();
+                });
+
+                // Notification bell
+                document.getElementById('notificationBell').addEventListener('click', () => {
+                    console.log("🔔 [AppManager] Notification bell clicked");
+                    this.switchSection('notifications');
+                });
+
+                // Navbar scroll effect
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) {
+                        document.getElementById('navbar').classList.add('scrolled');
+                    } else {
+                        document.getElementById('navbar').classList.remove('scrolled');
+                    }
+                });
+
+                console.log("✅ [AppManager] All event listeners registered");
+            }
+
+            static updateUI() {
+                console.log("🎨 [AppManager] Updating UI...");
+                
+                // Update user info
+                document.getElementById('userAvatar').textContent = this.currentUser.avatar;
+                document.getElementById('userName').textContent = this.currentUser.name;
+                document.getElementById('userRole').textContent = this.currentUser.role;
+                document.getElementById('welcomeMessage').textContent = `Welcome back, ${this.currentUser.name.split(' ')[0]}!`;
+
+                // Update dashboard stats
+                document.getElementById('totalScans').textContent = this.dashboardData.totalScans;
+                document.getElementById('threatsBlocked').textContent = this.dashboardData.threatsBlocked;
+                document.getElementById('systemHealth').textContent = `${this.dashboardData.systemHealth}%`;
+                document.getElementById('activeTools').textContent = this.dashboardData.activeTools;
+
+                // Render dashboard cards
+                this.renderDashboardCards();
+                
+                console.log("✅ [AppManager] UI update completed");
+            }
+
+            static renderDashboardCards() {
+                console.log("🃏 [AppManager] Rendering dashboard cards...");
+                const dashboardGrid = document.getElementById('dashboardGrid');
+                
+                const cards = [
+                    {
+                        title: 'Security Status',
+                        content: `Your systems are <strong style="color: #2ed573;">secure</strong>. Security score: ${this.dashboardData.securityScore}%`,
+                        icon: 'fas fa-shield-alt',
+                        stats: [
+                            { value: `${this.dashboardData.securityScore}%`, label: 'Security Score' },
+                            { value: `${this.dashboardData.systemHealth}%`, label: 'System Health' }
+                        ]
+                    },
+                    {
+                        title: 'Threat Detection',
+                        content: `<strong>${this.dashboardData.threatsBlocked}</strong> threats blocked in the last 24 hours.`,
+                        icon: 'fas fa-radar',
+                        stats: [
+                            { value: this.dashboardData.totalScans, label: 'Total Scans' },
+                            { value: '0', label: 'Active Threats' }
+                        ]
+                    }
+                ];
+
+                dashboardGrid.innerHTML = cards.map(card => `
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-title-section">
+                                <div class="card-icon">
+                                    <i class="${card.icon}"></i>
+                                </div>
+                                <h3 class="card-title">${card.title}</h3>
+                            </div>
+                            <div class="card-actions">
+                                <button class="card-action-btn">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-content">${card.content}</div>
+                        <div class="card-stats">
+                            ${card.stats.map(stat => `
+                                <div class="stat">
+                                    <div class="stat-number">${stat.value}</div>
+                                    <div class="stat-label">${stat.label}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('');
+
+                console.log("✅ [AppManager] Dashboard cards rendered");
+            }
+
+            static switchSection(sectionId) {
+                console.log(`🔄 [AppManager] Switching to section: ${sectionId}`);
+                
+                // Remove active class from all sections and nav links
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Add active class to selected section and nav link
+                const sectionElement = document.getElementById(sectionId + 'Section');
+                const navLink = document.querySelector(`[data-section="${sectionId}"]`);
+                
+                if (sectionElement) sectionElement.classList.add('active');
+                if (navLink) navLink.classList.add('active');
+
+                console.log(`✅ [AppManager] Switched to ${sectionId} section`);
+            }
+
+            static logout() {
+                console.log("🚪 [AppManager] Starting logout process...");
+                
+                if (confirm('Are you sure you want to logout?')) {
+                    // Simulate logout API call
+                    setTimeout(() => {
+                        console.log("✅ [AppManager] Logout successful");
+                        alert('Logout successful! In a real application, you would be redirected to the login page.');
+                         window.location.href = '/public/auth/login.html';
+                    }, 1000);
+                } else {
+                    console.log("❌ [AppManager] Logout cancelled by user");
+                }
+            }
+
+            static hideLoadingScreen() {
+                console.log("👋 [AppManager] Hiding loading screen...");
+                const loadingScreen = document.getElementById('loadingScreen');
+                
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    console.log("✅ [AppManager] Loading screen hidden");
+                    
+                    // Show welcome notification
+                    this.showNotification(
+                        'System Ready', 
+                        `Welcome to Wailand Security System, ${this.currentUser.name.split(' ')[0]}!`, 
+                        'success'
+                    );
+                }, 500);
+            }
+
+            static showNotification(title, message, type = 'info') {
+                console.log(`🔔 [AppManager] Showing notification: ${title} - ${message}`);
+                // In a real app, this would show a styled notification
+                console.log(`📢 Notification: ${title} - ${message} (${type})`);
+            }
+
+            static showError(message) {
+                console.error(`❌ [AppManager] Error: ${message}`);
+                this.showNotification('Error', message, 'error');
+            }
+
+            static randomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+        }
+
+        // =============================================
+        // 🎬 APPLICATION STARTUP
+        // =============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("📄 [Main] DOM fully loaded and parsed");
+            console.log("🎯 [Main] Starting Wailand Security System...");
+            
+            // Initialize the application
+            AppManager.initialize().catch(error => {
+                console.error("💥 [Main] Critical application error:", error);
+            });
+        });
+
+        // Global error handler
+        window.addEventListener('error', function(event) {
+            console.error("💥 [Global] Unhandled error:", event.error);
+        });
+
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error("💥 [Global] Unhandled promise rejection:", event.reason);
+        });
+
+        // Connection status monitoring
+        window.addEventListener('online', function() {
+            console.log("🌐 [Network] Connection restored");
+            AppManager.showNotification('Connection Restored', 'You are back online', 'success');
+        });
+
+        window.addEventListener('offline', function() {
+            console.log("🌐 [Network] Connection lost");
+            AppManager.showNotification('Connection Lost', 'Please check your internet connection', 'warning');
+        });
+   function openAIAssistant() {
+            // افتح صفحة الذكاء الاصطناعي في نافذة جديدة
+            const aiPageUrl = '/public/ai-assistant.html'; // اسم صفحتك هنا
+            window.open(aiPageUrl, '_blank', 'width=800,height=600,location=no,menubar=no,toolbar=no');
+        }
+
+        setInterval(() => {
+            const btn = document.querySelector('.ai-assistant-btn');
+            btn.classList.toggle('pulse');
+        }, 4000);
     </script>
 </body>
 </html>

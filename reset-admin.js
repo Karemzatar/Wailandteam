@@ -2,37 +2,37 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 
-// مسار ملف الأدمن
+// Admin file path
 const ADMINS_FILE = path.join(__dirname, 'data', 'admins.json');
 
-// تأكد من وجود مجلد data
+// Ensure data directory exists
 const dataDir = path.join(__dirname, 'data');
 if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
 }
 
-// كلمة السر الجديدة المشفرة
+// New hashed password
 async function resetAdmin() {
     try {
         const hashedPassword = await bcrypt.hash('admin123', 12);
-        
+
         const adminData = [
             {
                 email: 'admin@wailand.com',
                 password: hashedPassword,
-                name: 'مدير النظام',
+                name: 'System Administrator',
                 role: 'admin',
                 createdAt: new Date().toISOString()
             }
         ];
-        
+
         fs.writeFileSync(ADMINS_FILE, JSON.stringify(adminData, null, 2));
-        console.log('✅ تم إعادة تعيين الأدمن بنجاح!');
-        console.log('📧 البريد: admin@wailand.com');
-        console.log('🔐 كلمة السر: admin123');
-        console.log('🔑 كلمة السر المشفرة:', hashedPassword);
+        console.log('✅ Admin reset successfully!');
+        console.log('📧 Email: admin@wailand.com');
+        console.log('🔐 Password: admin123');
+        console.log('🔑 Hashed password:', hashedPassword);
     } catch (error) {
-        console.error('❌ خطأ في إعادة التعيين:', error);
+        console.error('❌ Reset error:', error);
     }
 }
 

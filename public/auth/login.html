@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wailand - Authentication</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f1a, #1a1a2e);
+            color: #e6e6ff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: rgba(25, 25, 45, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #7a82ff, #3bd1ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .logo p {
+            color: #a0a0d0;
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #b8b8e0;
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(35, 35, 60, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #e6e6ff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #7a82ff;
+            box-shadow: 0 0 15px rgba(122, 130, 255, 0.5);
+            background: rgba(45, 45, 75, 0.7);
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            color: #7a82ff;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember input {
+            margin-right: 8px;
+            accent-color: #7a82ff;
+        }
+
+        .link {
+            color: #3bd1ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .link:hover {
+            color: #7a82ff;
+            text-decoration: underline;
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #7a82ff, #3bd1ff);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(122, 130, 255, 0.4);
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(122, 130, 255, 0.6);
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #a0a0d0;
+        }
+
+        .auth-footer a {
+            color: #3bd1ff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .auth-footer a:hover {
+            color: #7a82ff;
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+
+        .divider span {
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .divider p {
+            padding: 0 15px;
+            color: #a0a0d0;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .active {
+            display: block;
+            opacity: 1;
+        }
+
+        .back-btn {
+            background: rgba(35, 35, 60, 0.7);
+            border: none;
+            color: #7a82ff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: rgba(55, 55, 80, 0.7);
+        }
+
+        .password-rules {
+            font-size: 0.8rem;
+            color: #a0a0d0;
+            margin-top: 5px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background: rgba(25, 25, 45, 0.9);
+            border-left: 4px solid #7a82ff;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: #ff4757;
+        }
+
+        .notification.success {
+            border-left-color: #2ed573;
+        }
+
+        @media (max-width: 500px) {
+            .auth-container {
+                padding: 30px 20px;
+            }
+            
+            .options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .link {
+                margin-top: 10px;
+            }
+        }
+
+        /* Animation for form elements */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group, .options, .auth-btn, .auth-footer {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .input-group:nth-child(1) { animation-delay: 0.1s; }
+        .input-group:nth-child(2) { animation-delay: 0.2s; }
+        .input-group:nth-child(3) { animation-delay: 0.3s; }
+        .options { animation-delay: 0.4s; }
+        .auth-btn { animation-delay: 0.5s; }
+        .auth-footer { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Back Button -->
+        <button class="back-btn" id="backButton" style="display: none;">
+            <i class="fas fa-arrow-left"></i> Back
+        </button>
+
+        <!-- Login Page -->
+        <div class="page active" id="loginPage">
+            <div class="logo">
+                <h1>Wailand</h1>
+                <p>Access your team's workspace</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                
+                <div class="input-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                
+                <div class="options">
+                    <div class="remember">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a class="link" id="forgotPasswordLink">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="auth-btn">Sign In</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>New to Wailand? <a class="link" id="createAccountLink">Create Account</a></p>
+            </div>
+        </div>
+
+        <!-- Create Account Page -->
+        <div class="page" id="createAccountPage">
+            <div class="logo">
+                <h1>Create Account</h1>
+                <p>Join the Wailand team workspace</p>
+            </div>
+            
+            <form id="createAccountForm">
+                <div class="input-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" name="name" required>
+                    <i class="fas fa-user"></i>
+                </div>
+                
+                <div class="input-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" name="email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                
+                <div class="input-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="password" required>
+                    <i class="fas fa-lock"></i>
+                    <div class="password-rules">Must be at least 8 characters with a number and symbol</div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="signupConfirmPassword">Confirm Password</label>
+                    <input type="password" id="signupConfirmPassword" name="confirmPassword" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                
+                <div class="options">
+                    <div class="remember">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the <a class="link" id="termsLink">Terms of Service</a></label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="auth-btn">Create Account</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Already have an account? <a class="link" id="loginLink">Sign In</a></p>
+            </div>
+        </div>
+
+        <!-- Forgot Password Page -->
+        <div class="page" id="forgotPasswordPage">
+            <div class="logo">
+                <h1>Reset Password</h1>
+                <p>We'll send a recovery link to your email</p>
+            </div>
+            
+            <form id="forgotPasswordForm">
+                <div class="input-group">
+                    <label for="recoveryEmail">Email</label>
+                    <input type="email" id="recoveryEmail" name="email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                
+                <button type="submit" class="auth-btn">Send Recovery Link</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Remember your password? <a class="link" id="backToLoginLink">Sign In</a></p>
+            </div>
+        </div>
+
+        <!-- Reset Password Page -->
+        <div class="page" id="resetPasswordPage">
+            <div class="logo">
+                <h1>Set New Password</h1>
+                <p>Create a new password for your account</p>
+            </div>
+            
+            <form id="resetPasswordForm">
+                <input type="hidden" id="resetEmail">
+                
+                <div class="input-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" name="password" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                
+                <div class="input-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" name="confirmPassword" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                
+                <button type="submit" class="auth-btn">Reset Password</button>
+            </form>
+        </div>
+
+        <!-- Success Message -->
+        <div class="page" id="successPage">
+            <div class="logo">
+                <h1>Check Your Email</h1>
+                <p>We've sent a password reset link to your email address</p>
+            </div>
+            
+            <div style="text-align: center; margin: 40px 0;">
+                <i class="fas fa-envelope-circle-check" style="font-size: 80px; color: #7a82ff; margin-bottom: 20px;"></i>
+                <p>Click the link in the email to reset your password.</p>
+            </div>
+            
+            <div class="auth-footer">
+                <p>Didn't receive the email? <a class="link" id="resendLink">Resend</a> or <a class="link" id="successBackLink">Go back</a></p>
+            </div>
+        </div>
+
+        <!-- Terms of Service Page -->
+        <div class="page" id="termsPage">
+            <div class="logo">
+                <h1>Terms of Service</h1>
+            </div>
+            
+            <div style="max-height: 300px; overflow-y: auto; margin-bottom: 20px; padding: 10px; background: rgba(35, 35, 60, 0.5); border-radius: 10px;">
+                <h3>1. Acceptance of Terms</h3>
+                <p>By accessing or using Wailand, you agree to be bound by these Terms of Service.</p>
+                
+                <h3>2. User Accounts</h3>
+                <p>You are responsible for maintaining the confidentiality of your account and password.</p>
+                
+                <h3>3. User Conduct</h3>
+                <p>You agree not to use the service for any illegal purpose or in violation of any laws.</p>
+                
+                <h3>4. Intellectual Property</h3>
+                <p>All content included on this site is the property of Wailand and protected by copyright laws.</p>
+                
+                <h3>5. Limitation of Liability</h3>
+                <p>Wailand shall not be liable for any indirect, incidental, special, consequential or punitive damages.</p>
+            </div>
+            
+            <button class="auth-btn" id="acceptTermsBtn">I Accept</button>
+            <div class="auth-footer">
+                <p><a class="link" id="backFromTermsLink">Go back</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Server API endpoints
+        const API_BASE = 'http://localhost:3000/api';
+        
+        // تخزين البيانات في localStorage (بديل عن data.json)
+        function getUsers() {
+            const users = localStorage.getItem('wailand_users');
+            return users ? JSON.parse(users) : [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('wailand_users', JSON.stringify(users));
+        }
+
+        function getResetTokens() {
+            const tokens = localStorage.getItem('wailand_reset_tokens');
+            return tokens ? JSON.parse(tokens) : {};
+        }
+
+        function saveResetTokens(tokens) {
+            localStorage.setItem('wailand_reset_tokens', JSON.stringify(tokens));
+        }
+
+        // Page navigation
+        const loginPage = document.getElementById('loginPage');
+        const createAccountPage = document.getElementById('createAccountPage');
+        const forgotPasswordPage = document.getElementById('forgotPasswordPage');
+        const resetPasswordPage = document.getElementById('resetPasswordPage');
+        const successPage = document.getElementById('successPage');
+        const termsPage = document.getElementById('termsPage');
+        const backButton = document.getElementById('backButton');
+        
+        // Links
+        const createAccountLink = document.getElementById('createAccountLink');
+        const loginLink = document.getElementById('loginLink');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const backToLoginLink = document.getElementById('backToLoginLink');
+        const successBackLink = document.getElementById('successBackLink');
+        const resendLink = document.getElementById('resendLink');
+        const termsLink = document.getElementById('termsLink');
+        const acceptTermsBtn = document.getElementById('acceptTermsBtn');
+        const backFromTermsLink = document.getElementById('backFromTermsLink');
+        
+        // Forms
+        const loginForm = document.getElementById('loginForm');
+        const createAccountForm = document.getElementById('createAccountForm');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        
+        // Show specific page and hide others
+        function showPage(page) {
+            // Hide all pages
+            loginPage.classList.remove('active');
+            createAccountPage.classList.remove('active');
+            forgotPasswordPage.classList.remove('active');
+            resetPasswordPage.classList.remove('active');
+            successPage.classList.remove('active');
+            termsPage.classList.remove('active');
+            
+            // Show the requested page
+            page.classList.add('active');
+            
+            // Show back button if not on login page
+            if (page !== loginPage && page !== termsPage) {
+                backButton.style.display = 'flex';
+            } else {
+                backButton.style.display = 'none';
+            }
+        }
+        
+        // Event listeners for navigation
+        createAccountLink.addEventListener('click', () => showPage(createAccountPage));
+        loginLink.addEventListener('click', () => showPage(loginPage));
+        forgotPasswordLink.addEventListener('click', () => showPage(forgotPasswordPage));
+        backToLoginLink.addEventListener('click', () => showPage(loginPage));
+        successBackLink.addEventListener('click', () => showPage(loginPage));
+        resendLink.addEventListener('click', () => showPage(forgotPasswordPage));
+        termsLink.addEventListener('click', () => showPage(termsPage));
+        backFromTermsLink.addEventListener('click', () => showPage(createAccountPage));
+        
+        backButton.addEventListener('click', () => showPage(loginPage));
+        acceptTermsBtn.addEventListener('click', () => {
+            document.getElementById('terms').checked = true;
+            showPage(createAccountPage);
+        });
+        
+        // إظهار الإشعارات
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // إنشاء توكن للاستعادة
+        function generateResetToken(email) {
+            const token = Math.random().toString(36).substring(2) + Date.now().toString(36);
+            const tokens = getResetTokens();
+            tokens[token] = {
+                email: email,
+                expires: Date.now() + 3600000 // صالح لمدة ساعة
+            };
+            saveResetTokens(tokens);
+            return token;
+        }
+        
+        // التحقق من صلاحية التوكن
+        function isValidToken(token) {
+            const tokens = getResetTokens();
+            return tokens[token] && tokens[token].expires > Date.now();
+        }
+        
+        // إرسال رابط الاستعادة (وهمي)
+        function sendResetEmail(email, token) {
+            // في تطبيق حقيقي، هذا سيرسل رسالة بريد إلكتروني
+            // هنا سنقوم بمحاكاة الإرسال وعرض الرابط للمستخدم
+            const resetLink = `${window.location.origin}${window.location.pathname}?token=${token}&action=reset-password`;
+            
+            showNotification(`Reset link: ${resetLink} (This would be sent via email in a real app)`, 'success');
+            
+            // تخزين الرابط في localStorage للوصول إليه لاحقاً
+            localStorage.setItem('last_reset_link', resetLink);
+            
+            return true;
+        }
+        
+        // معالجة معلمات URL
+        function processUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const action = urlParams.get('action');
+            
+            if (action === 'reset-password' && token && isValidToken(token)) {
+                const tokens = getResetTokens();
+                const email = tokens[token].email;
+                document.getElementById('resetEmail').value = email;
+                showPage(resetPasswordPage);
+            }
+        }
+        
+        // Form submission handlers
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simple validation
+            if (!email || !password) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            try {
+                console.log('Attempting login for:', email);
+                
+                // Send login request to server
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('Login successful for:', email);
+                    showNotification('Login successful!', 'success');
+                    
+                    // Store user session
+                    localStorage.setItem('currentUser', JSON.stringify(data.user));
+                    
+                    // Redirect to home page
+                    setTimeout(() => {
+                        window.location.href = '/home.html';
+                    }, 1000);
+                } else {
+                    console.log('Login failed:', data.message);
+                    showNotification(data.message || 'Login failed', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('Network error. Please try again.', 'error');
+            }
+        });
+        
+        createAccountForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const termsAccepted = document.getElementById('terms').checked;
+            
+            // Simple validation
+            if (!name || !email || !password || !confirmPassword) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (!termsAccepted) {
+                showNotification('Please accept the Terms of Service', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showNotification('Password must be at least 8 characters long', 'error');
+                return;
+            }
+            
+            try {
+                console.log('Creating account for:', email);
+                
+                // Send signup request to server
+                const response = await fetch(`${API_BASE}/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('Account created successfully for:', email);
+                    showNotification('Account created successfully!', 'success');
+                    showPage(loginPage);
+                } else {
+                    console.log('Account creation failed:', data.message);
+                    showNotification(data.message || 'Account creation failed', 'error');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                showNotification('Network error. Please try again.', 'error');
+            }
+        });
+        
+        forgotPasswordForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('recoveryEmail').value;
+            
+            // Simple validation
+            if (!email) {
+                showNotification('Please enter your email address', 'error');
+                return;
+            }
+            
+            try {
+                console.log('Requesting password reset for:', email);
+                
+                // Send password reset request to server
+                const response = await fetch(`${API_BASE}/forgot-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('Password reset email sent to:', email);
+                    showPage(successPage);
+                } else {
+                    console.log('Password reset request failed:', data.message);
+                    showNotification(data.message || 'Password reset request failed', 'error');
+                }
+            } catch (error) {
+                console.error('Password reset error:', error);
+                showNotification('Network error. Please try again.', 'error');
+            }
+        });
+        
+        resetPasswordForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('resetEmail').value;
+            const password = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+            
+            // Simple validation
+            if (!password || !confirmPassword) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showNotification('Password must be at least 8 characters long', 'error');
+                return;
+            }
+            
+            try {
+                console.log('Resetting password for:', email);
+                
+                // Send password reset request to server
+                const response = await fetch(`${API_BASE}/reset-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('Password reset successfully for:', email);
+                    showNotification('Password reset successfully!', 'success');
+                    showPage(loginPage);
+                    
+                    // تنظيف معلمات URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } else {
+                    console.log('Password reset failed:', data.message);
+                    showNotification(data.message || 'Password reset failed', 'error');
+                }
+            } catch (error) {
+                console.error('Password reset error:', error);
+                showNotification('Network error. Please try again.', 'error');
+            }
+        });
+        
+        // معالجة معلمات URL عند تحميل الصفحة
+        window.addEventListener('load', function() {
+            // تذكرني
+            const rememberMe = localStorage.getItem('rememberMe');
+            const savedEmail = localStorage.getItem('savedEmail');
+            
+            if (rememberMe === 'true' && savedEmail) {
+                document.getElementById('loginEmail').value = savedEmail;
+                document.getElementById('remember').checked = true;
+            }
+            
+            processUrlParams();
+        });
+        
+        // حفظ تفضيل تذكرني
+        document.getElementById('remember').addEventListener('change', function() {
+            if (this.checked) {
+                const email = document.getElementById('loginEmail').value;
+                localStorage.setItem('rememberMe', 'true');
+                localStorage.setItem('savedEmail', email);
+            } else {
+                localStorage.setItem('rememberMe', 'false');
+                localStorage.removeItem('savedEmail');
+            }
+        });
+    </script>
+</body>
+</html>

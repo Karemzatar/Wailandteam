@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="descrption" content="Discover Wailand Team — expert developers creating fast, modern solutions. Boost your project today and start building smarter!">
+    <!-- التصحيح: تصحيح كلمة "description" -->
+    <meta name="description" content="Discover Wailand Team — expert developers creating fast, modern solutions. Boost your project today and start building smarter!">
     <meta name="keywords" content="Wailand Team, Wailand developers, web development, software development, cybersecurity solutions, AI tools, automation systems, UI UX design, full-stack development, secure hosting, tech solutions, digital innovation, programming services, SaaS development, website optimization, custom applications, tech agency, modern web design">
     <meta property="og:title" content="Wailand Team — Expert Web & Software Development">
     <meta property="og:description" content="Discover Wailand Team: professional developers creating modern websites, AI tools, and cybersecurity solutions. Boost your project today!">
@@ -12,63 +13,57 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Wailand Team">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Wailand Team — Innovative Web & Software Solutions">
-    <meta property="og:description" content="Join Wailand Team, the expert developers delivering modern websites, AI tools, cybersecurity solutions, automation systems, and full-stack development. Boost your project today with Wailand Team!">
-    <meta property="og:image" content="/wailand/assets/images/wailand-logo.png">
-    <meta property="og:url" content="https://wailand.xyz">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Wailand Team">
+    <!-- التصحيح: إزالة التكرار في meta tags -->
+    
+    <!-- التصحيح: تصحيح JSON-LD وإزالة الأخطاء في علامات الاقتباس -->
     <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Wailand Team",
-  "url": "https://wailand.xyz",
-  "logo": "content="/wailand/assets/images/wailand-logo.png"",
-  "sameAs": [
-    "https://www.facebook.com/wailandteam",
-    "https://twitter.com/wailandteam",
-    "https://www.linkedin.com/company/wailandteam",
-    "https://www.instagram.com/wailandteam"
-  ],
-  "description": "Wailand Team is a leading tech organization delivering modern websites, AI tools, cybersecurity solutions, automation systems, and full-stack development. Boost your project today!",
-  "foundingDate": "2026-03-01",
-  "founders": [
     {
-      "@type": "Person",
-      "name": "Karem Zatar"
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Wailand Team",
+      "url": "https://wailand.xyz",
+      "logo": "https://wailand.xyz/wailand/assets/images/wailand-logo.png",
+      "sameAs": [
+        "https://www.facebook.com/wailandteam",
+        "https://twitter.com/wailandteam",
+        "https://www.linkedin.com/company/wailandteam",
+        "https://www.instagram.com/wailandteam"
+      ],
+      "description": "Wailand Team is a leading tech organization delivering modern websites, AI tools, cybersecurity solutions, automation systems, and full-stack development. Boost your project today!",
+      "foundingDate": "2026-03-01",
+      "founders": [
+        {
+          "@type": "Person",
+          "name": "Karem Zatar"
+        }
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "support@wailandteam.xyz",
+        "telephone": "+972-59-279-8000"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Palestine",
+        "addressRegion": "West Bank"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://wailand.xyz/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
     }
-  ],
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "customer support",
-    "email": "support@wailandteam.xyz",
-    "telephone": "+972-59-279-8000"
-  },
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Palestine",
-    "addressRegion": "West Bank"
-  },
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://wailand.xyz/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
-<script>
-  fetch("https://3e36f9b6-36ba-4d27-bfc1-c2fc9f63387e-00-hczrrmbzo42n.janeway.replit.dev/")
-    .then(response => response.text())  // أو .json() إذا السيرفر يرجع JSON
-    .then(data => console.log(data))
-    .catch(err => console.error("Error:", err));
-</script>
-
-
-
+    </script>
+    
+    <!-- التصحيح: إضافة charset للتأكد من دعم اللغة العربية -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
     <title>Wailand - Authentication</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        /* التصحيح: إضافة تحسينات للخطوط العربية */
         * {
             margin: 0;
             padding: 0;
@@ -84,6 +79,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            direction: ltr; /* التصحيح: تحديد الاتجاه */
         }
 
         .auth-container {
@@ -115,6 +111,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             background: linear-gradient(45deg, #7a82ff, #3bd1ff);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 1px;
@@ -277,6 +274,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.9rem;
         }
 
         .back-btn:hover {
@@ -287,6 +285,7 @@
             font-size: 0.8rem;
             color: #a0a0d0;
             margin-top: 5px;
+            line-height: 1.4;
         }
 
         .notification {
@@ -302,6 +301,7 @@
             transform: translateX(100%);
             transition: transform 0.3s ease;
             z-index: 1000;
+            max-width: 350px;
         }
 
         .notification.show {
@@ -316,9 +316,11 @@
             border-left-color: #2ed573;
         }
 
+        /* التصحيح: تحسين الاستجابة للجوال */
         @media (max-width: 500px) {
             .auth-container {
                 padding: 30px 20px;
+                margin: 10px;
             }
             
             .options {
@@ -329,6 +331,16 @@
             
             .link {
                 margin-top: 10px;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .notification {
+                left: 20px;
+                right: 20px;
+                max-width: none;
             }
         }
 
@@ -348,6 +360,18 @@
         .options { animation-delay: 0.4s; }
         .auth-btn { animation-delay: 0.5s; }
         .auth-footer { animation-delay: 0.6s; }
+
+        /* التصحيح: إضافة أنماط لرسائل التحقق */
+        .validation-message {
+            font-size: 0.8rem;
+            color: #ff4757;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .validation-message.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -533,7 +557,7 @@
                 <p>Wailand shall not be liable for any indirect, incidental, special, consequential or punitive damages.</p>
             </div>
             
-            <button class="auth-btn" id="acceptTermsBtn">I Accept</button>
+            <button type="button" class="auth-btn" id="acceptTermsBtn">I Accept</button>
             <div class="auth-footer">
                 <p><a class="link" id="backFromTermsLink">Go back</a></p>
             </div>
@@ -608,7 +632,7 @@
             showPage(createAccountPage);
         });
         
-        // إظهار الإشعارات
+        // Show notifications
         function showNotification(message, type = 'info') {
             const notification = document.getElementById('notification');
             notification.textContent = message;
@@ -621,11 +645,9 @@
             }, 3000);
         }
         
-        // 🔄 معالجة إعادة تعيين كلمة السر
+        // 🔄 Handle password reset
         async function handleForgotPassword(email) {
             try {
-                console.log('إرسال طلب إعادة تعيين ل:', email);
-                
                 const response = await fetch(`${API_BASE}/forgot-password`, {
                     method: 'POST',
                     headers: {
@@ -637,40 +659,31 @@
                 const data = await response.json();
                 
                 if (response.ok) {
-                    showNotification('تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني', 'success');
+                    showNotification('Reset link sent to your email', 'success');
                     showPage(successPage);
                 } else {
-                    showNotification(data.message, 'error');
+                    showNotification(data.message || 'Error sending reset link', 'error');
                 }
             } catch (error) {
-                console.error('خطأ في إعادة التعيين:', error);
-                showNotification('خطأ في الشبكة', 'error');
+                console.error('Reset error:', error);
+                showNotification('Network error. Please check your connection.', 'error');
             }
         }
         
-        // 🔄 معالجة رابط إعادة التعيين
+        // 🔄 Handle reset link from URL
         function processResetPassword() {
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('token');
             const action = urlParams.get('action');
             
             if (action === 'reset-password' && token) {
-                // التحقق من صحة التوكن
-                fetch(`${API_BASE}/verify-token/${token}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.valid) {
-                            // إظهار صفحة إعادة التعيين
-                            showPage(resetPasswordPage);
-                            document.getElementById('resetToken').value = token;
-                        } else {
-                            showNotification('رابط إعادة التعيين غير صالح أو منتهي', 'error');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('خطأ في التحقق من الرابط:', error);
-                        showNotification('خطأ في التحقق من الرابط', 'error');
-                    });
+                // Show reset page
+                showPage(resetPasswordPage);
+                document.getElementById('resetToken').value = token;
+                
+                // Clean up URL without reloading
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
             }
         }
         
@@ -678,7 +691,7 @@
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             
             if (!email || !password) {
@@ -699,23 +712,27 @@
                 
                 if (response.ok) {
                     showNotification('Login successful!', 'success');
+                    
                     // Store user session
-                    localStorage.setItem('currentUser', JSON.stringify(data.user));
-                    // Redirect to home page
-                    // ✅ التصحيح: Redirect to the correct route
-setTimeout(() => {
-    if (data.redirectTo) {
-        window.location.href = data.redirectTo;
-    } else if (data.user && data.user.role === 'admin') {
-        window.location.href = '/dashboard';
-    } else {
-        window.location.href = '/public/home.html';
-    }
-}, 1000);
+                    if (data.user) {
+                        localStorage.setItem('currentUser', JSON.stringify(data.user));
+                    }
+                    
+                    // Redirect based on response or default
+                    setTimeout(() => {
+                        if (data.redirectTo) {
+                            window.location.href = data.redirectTo;
+                        } else if (data.user && data.user.role === 'admin') {
+                            window.location.href = '/dashboard';
+                        } else {
+                            window.location.href = '/home.html';
+                        }
+                    }, 1000);
                 } else {
-                    showNotification(data.message, 'error');
+                    showNotification(data.message || 'Invalid credentials', 'error');
                 }
             } catch (error) {
+                console.error('Login error:', error);
                 showNotification('Network error. Please try again.', 'error');
             }
         });
@@ -723,8 +740,8 @@ setTimeout(() => {
         createAccountForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
             const confirmPassword = document.getElementById('signupConfirmPassword').value;
             const termsAccepted = document.getElementById('terms').checked;
@@ -749,6 +766,13 @@ setTimeout(() => {
                 return;
             }
             
+            // التصحيح: التحقق من صحة البريد الإلكتروني
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showNotification('Please enter a valid email address', 'error');
+                return;
+            }
+            
             try {
                 const response = await fetch(`${API_BASE}/signup`, {
                     method: 'POST',
@@ -763,10 +787,14 @@ setTimeout(() => {
                 if (response.ok) {
                     showNotification('Account created successfully!', 'success');
                     showPage(loginPage);
+                    
+                    // Clear form
+                    createAccountForm.reset();
                 } else {
-                    showNotification(data.message, 'error');
+                    showNotification(data.message || 'Error creating account', 'error');
                 }
             } catch (error) {
+                console.error('Signup error:', error);
                 showNotification('Network error. Please try again.', 'error');
             }
         });
@@ -774,10 +802,16 @@ setTimeout(() => {
         forgotPasswordForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('recoveryEmail').value;
+            const email = document.getElementById('recoveryEmail').value.trim();
             
             if (!email) {
                 showNotification('Please enter your email address', 'error');
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showNotification('Please enter a valid email address', 'error');
                 return;
             }
             
@@ -821,20 +855,19 @@ setTimeout(() => {
                     showNotification('Password reset successfully!', 'success');
                     setTimeout(() => {
                         showPage(loginPage);
-                        // تنظيف الرابط
-                        window.history.replaceState({}, document.title, window.location.pathname);
                     }, 2000);
                 } else {
-                    showNotification(data.message, 'error');
+                    showNotification(data.message || 'Error resetting password', 'error');
                 }
             } catch (error) {
+                console.error('Reset password error:', error);
                 showNotification('Network error. Please try again.', 'error');
             }
         });
         
-        // معالجة معلمات URL عند تحميل الصفحة
+        // Process URL parameters on page load
         window.addEventListener('load', function() {
-            // تذكرني
+            // Remember me
             const rememberMe = localStorage.getItem('rememberMe');
             const savedEmail = localStorage.getItem('savedEmail');
             
@@ -843,10 +876,11 @@ setTimeout(() => {
                 document.getElementById('remember').checked = true;
             }
             
+            // Check for reset password link
             processResetPassword();
         });
         
-        // حفظ تفضيل تذكرني
+        // Save remember me preference
         document.getElementById('remember').addEventListener('change', function() {
             if (this.checked) {
                 const email = document.getElementById('loginEmail').value;
@@ -857,6 +891,18 @@ setTimeout(() => {
                 localStorage.removeItem('savedEmail');
             }
         });
+        
+        // التصحيح: تحسين تجربة المستخدم - إعادة تعيين النماذج عند التنقل
+        function clearForm(formId) {
+            const form = document.getElementById(formId);
+            if (form) form.reset();
+        }
+        
+        // إضافة مستمعين للأحداث لتنظيف النماذج
+        createAccountLink.addEventListener('click', () => clearForm('loginForm'));
+        loginLink.addEventListener('click', () => clearForm('createAccountForm'));
+        forgotPasswordLink.addEventListener('click', () => clearForm('loginForm'));
+        backToLoginLink.addEventListener('click', () => clearForm('forgotPasswordForm'));
     </script>
 </body>
 </html>

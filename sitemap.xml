@@ -4,26 +4,37 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
                       http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  
+
+  <!-- الصفحة الرئيسية -->
   <url>
-    <loc>https://wailand.xyz/</loc>
-    <lastmod>2026-3-1</lastmod>
+    <loc>https://wailand.ct.ws/</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.00</priority>
   </url>
 
+  <!-- صفحة رئيسية / Home -->
   <url>
-    <loc>https://wailand.xyz/home.html</loc>
-    <lastmod>2026-3-1</lastmod>
+    <loc>https://wailand.ct.ws/home.html</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>1.00</priority>
+    <priority>0.90</priority>
   </url>
 
+  <!-- مثال صفحة منتجات -->
   <url>
-    <loc>https://wailand.xyz/</loc>
-    <lastmod>2026-3-1</lastmod>
+    <loc>https://wailand.ct.ws/products/</loc>
+    <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.70</priority>
+  </url>
+
+  <!-- مثال صفحة اتصل بنا -->
+  <url>
+    <loc>https://wailand.ct.ws/contact/</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
   </url>
 
 </urlset>

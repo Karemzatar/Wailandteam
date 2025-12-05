@@ -1,9 +1,14 @@
-# robots.txt for https://wailand.ct.ws/
+# ============================================================
+# robots.txt for https://wailand.xyz/
+# Optimized for eCommerce / Company Website
+# ============================================================
 
-# -------------------------------------------------
-# General rules for all user agents (web crawlers)
+# ------------------------------------------------------------
+# Global Rules for All Crawlers
+# ------------------------------------------------------------
 User-agent: *
-# Disallow admin and backend related directories
+
+# Block sensitive system directories
 Disallow: /admin/
 Disallow: /backend/
 Disallow: /config/
@@ -11,69 +16,83 @@ Disallow: /private/
 Disallow: /tmp/
 Disallow: /logs/
 Disallow: /cache/
+Disallow: /core/
+Disallow: /includes/
 
-# Disallow URLs with query parameters that can cause duplicate content
+# Block staging or development environments
+Disallow: /staging/
+Disallow: /test/
+Disallow: /dev/
+
+# Block login and user account pages
+Disallow: /login/
+Disallow: /register/
+Disallow: /password-reset/
+Disallow: /account/
+Disallow: /user/profile/
+
+# Block internal search pages (SEO best practice)
+Disallow: /search/
+Disallow: /?s=
+
+# Block duplicate-content URLs with query strings
 Disallow: /*?*sessionid=
-Disallow: /*?*sort=
 Disallow: /*?*filter=
+Disallow: /*?*sort=
+Disallow: /*?page=   # pagination duplicates
+Disallow: /*&amp;*
 
-# Disallow file types that are not useful for SEO
+# Disallow file types that don’t add SEO value
 Disallow: /*.cgi$
 Disallow: /*.pdf$
 Disallow: /*.doc$
 Disallow: /*.xls$
 Disallow: /*.ppt$
 
-# Allow important assets
+# Allow important frontend assets
 Allow: /assets/
 Allow: /images/
 Allow: /css/
 Allow: /js/
+Allow: /fonts/
 
-# Block specific bots (example)
+# General crawl control
+Crawl-delay: 5
+
+# ------------------------------------------------------------
+# Specific Bots Controls
+# ------------------------------------------------------------
 User-agent: BadBot
 Disallow: /
 
-# Block specific bots known for scraping aggressively
 User-agent: SemrushBot
 Disallow: /
 
-# Allow Googlebot full access
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# ------------------------------------------------------------
+# Allow Good Crawlers Full Access
+# ------------------------------------------------------------
 User-agent: Googlebot
 Disallow:
 
-# Allow Bingbot full access
 User-agent: Bingbot
 Disallow:
 
-# Sitemap locations
-Sitemap: https://wailand.ct.ws/sitemap.xml
+User-agent: Applebot
+Disallow:
 
-# Crawl-delay example (some bots respect this)
-User-agent: *
-Crawl-delay: 10
+# ------------------------------------------------------------
+# Sitemaps (critical for SEO)
+# ------------------------------------------------------------
+Sitemap: https://wailand.xyz/sitemap.xml
+Sitemap: https://wailand.xyz/sitemap-products.xml
+Sitemap: https://wailand.xyz/sitemap-images.xml
 
-# Prevent crawling of staging or test environments
-User-agent: *
-Disallow: /staging/
-Disallow: /test/
-Disallow: /dev/
-
-# Block indexing of search result pages (common SEO best practice)
-Disallow: /search/
-Disallow: /?s=
-
-# Block access to user profile pages if private
-Disallow: /user/profile/
-Disallow: /account/
-
-# Block login, registration, and password reset pages
-Disallow: /login/
-Disallow: /register/
-Disallow: /password-reset/
-
-# Block specific tracking or analytics scripts if needed
-Disallow: /tracking/
-Disallow: /analytics/
-
-# End of file
+# ============================================================
+# END OF FILE
+# ========================================================xyz

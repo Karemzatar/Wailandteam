@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wailand - Security Management System</title>
+    <title>Wailand - Security Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 🎨 CSS Variables for consistent theming */
+        /* CSS Variables for consistent theming */
         :root {
             --bg-dark: #0f0f1a;
             --bg-darker: #1a1a2e;
@@ -17,7 +17,6 @@
             --secondary: #3bd1ff;
             --secondary-dark: #1ab1df;
             --accent: #ff416c;
-            --accent-dark: #df214c;
             --success: #2ed573;
             --warning: #ffa502;
             --danger: #ff4757;
@@ -28,9 +27,11 @@
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
             --glow: 0 0 20px rgba(122, 130, 255, 0.3);
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
         }
 
-        /* 🔧 Base Styles */
+        /* Global Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -43,9 +44,10 @@
             color: var(--text-light);
             min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* 🔄 Loading Screen */
+        /* Loading Screen Styles */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -58,7 +60,13 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
+            opacity: 1;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
         }
 
         .loading-spinner {
@@ -71,54 +79,12 @@
             margin-bottom: 20px;
         }
 
-        .loading-text {
-            color: var(--text-lighter);
-            font-size: 1.1rem;
-        }
-          .ai-assistant-btn {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #7a82ff 0%, #3bd1ff 100%);
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 25px rgba(122, 130, 255, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .ai-assistant-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 35px rgba(122, 130, 255, 0.6);
-        }
-
-        .ai-assistant-btn i {
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(122, 130, 255, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(122, 130, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(122, 130, 255, 0); }
-        }
-
-        .ai-assistant-btn.pulse {
-            animation: pulse 2s infinite;
-        }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* 🧭 Navigation */
+        /* Navigation Bar Styles */
         .navbar {
             background: rgba(25, 25, 45, 0.95);
             backdrop-filter: blur(15px);
@@ -130,12 +96,6 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            padding: 12px 30px;
-            background: rgba(15, 15, 35, 0.98);
         }
 
         .logo {
@@ -147,8 +107,8 @@
 
         .logo-icon {
             font-size: 2rem;
-            color: var(--primary);
             background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -157,55 +117,51 @@
             font-size: 1.8rem;
             font-weight: 800;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .nav-links {
+        /* Navigation Menu Styles */
+        .nav-menu {
             display: flex;
-            gap: 25px;
-            align-items: center;
+            gap: 30px;
+            margin-right: 30px;
         }
 
         .nav-link {
             color: var(--text-lighter);
             text-decoration: none;
-            padding: 10px 18px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
             font-weight: 500;
             position: relative;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .nav-link:hover, .nav-link.active {
+        .nav-link:hover {
             color: var(--primary);
             background: rgba(122, 130, 255, 0.1);
-            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            background: rgba(122, 130, 255, 0.15);
         }
 
         .nav-link.active::after {
             content: '';
             position: absolute;
             bottom: -2px;
-            left: 18px;
-            right: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
             height: 2px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             border-radius: 2px;
         }
 
-        .nav-badge {
-            background: var(--accent);
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin-left: 5px;
-        }
-
+        /* User Menu Styles */
         .user-menu {
             display: flex;
             align-items: center;
@@ -219,7 +175,7 @@
             cursor: pointer;
             padding: 8px;
             border-radius: 8px;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .notification-bell:hover {
@@ -247,8 +203,8 @@
             align-items: center;
             gap: 12px;
             padding: 8px 15px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
             cursor: pointer;
         }
 
@@ -292,7 +248,7 @@
             padding: 10px 18px;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -304,18 +260,18 @@
             transform: translateY(-2px);
         }
 
-        /* 📦 Main Container */
+        /* Main Container Styles */
         .container {
             max-width: 1800px;
             margin: 0 auto;
             padding: 30px;
         }
 
-        /* 🏠 Welcome Section */
+        /* Welcome Section Styles */
         .welcome-section {
             background: var(--bg-card);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
+            border-radius: var(--border-radius);
             padding: 40px;
             margin-bottom: 30px;
             border: 1px solid var(--border-color);
@@ -338,13 +294,13 @@
         .welcome-content {
             position: relative;
             z-index: 1;
-            max-width: 800px;
         }
 
         .welcome-title {
             font-size: 2.5rem;
             margin-bottom: 15px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1.2;
@@ -357,29 +313,44 @@
             line-height: 1.6;
         }
 
-        .welcome-stats {
+        /* Stats Grid Styles */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
+            gap: 20px;
             margin-top: 30px;
         }
 
-        .welcome-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
+        .stat-card {
             background: rgba(35, 35, 60, 0.5);
-            border-radius: 12px;
+            border-radius: var(--border-radius);
+            padding: 20px;
             border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
 
-        .welcome-stat:hover {
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-hover);
             border-color: rgba(122, 130, 255, 0.3);
+        }
+
+        .stat-card:hover::before {
+            transform: translateX(0);
         }
 
         .stat-value {
@@ -388,6 +359,7 @@
             color: var(--primary);
             line-height: 1;
             margin-bottom: 8px;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .stat-label {
@@ -395,838 +367,1760 @@
             color: var(--text-lighter);
         }
 
-        /* 📊 Dashboard Grid */
-        .dashboard-grid {
+        /* Content Grid Layout */
+        .content-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: 2fr 1fr;
             gap: 25px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
-        .dashboard-card {
+        /* Tools Section Styles */
+        .tools-section {
             background: var(--bg-card);
             backdrop-filter: blur(10px);
-            border-radius: 16px;
+            border-radius: var(--border-radius);
             padding: 25px;
             border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        .dashboard-card::before {
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .tools-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tool-card {
+            background: rgba(35, 35, 60, 0.5);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tool-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
+            width: 3px;
             height: 100%;
-            background: linear-gradient(135deg, rgba(122, 130, 255, 0.05), rgba(59, 209, 255, 0.05));
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 3px 0 0 3px;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
-        .dashboard-card:hover {
-            transform: translateY(-8px);
+        .tool-card:hover {
+            transform: translateY(-3px);
             box-shadow: var(--shadow-hover);
             border-color: rgba(122, 130, 255, 0.3);
         }
 
-        .dashboard-card:hover::before {
+        .tool-card:hover::before {
             opacity: 1;
         }
 
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .card-title-section {
+        .tool-header {
             display: flex;
             align-items: center;
             gap: 15px;
+            margin-bottom: 10px;
         }
 
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+        .tool-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: white;
-            box-shadow: var(--glow);
+            flex-shrink: 0;
         }
 
-        .card-title {
-            font-size: 1.3rem;
+        .tool-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tool-name {
             font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .card-actions {
-            display: flex;
-            gap: 8px;
+        .tool-description {
+            font-size: 0.85rem;
+            color: var(--text-lighter);
+            display: -webkit-box;
+            line-clamp: 2;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .card-action-btn {
-            background: rgba(255, 255, 255, 0.05);
+        .tool-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-online {
+            background: rgba(46, 213, 115, 0.2);
+            color: var(--success);
+        }
+
+        .status-warning {
+            background: rgba(255, 165, 2, 0.2);
+            color: var(--warning);
+        }
+
+        .usage-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .usage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .usage-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Notifications Panel Styles */
+        .notifications-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
             border: 1px solid var(--border-color);
-            color: var(--text-lighter);
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
+        }
+
+        .notifications-list {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notification-item {
+            background: rgba(35, 35, 60, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--primary);
+            transition: var(--transition);
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .card-action-btn:hover {
-            background: rgba(122, 130, 255, 0.1);
-            color: var(--primary);
-            border-color: rgba(122, 130, 255, 0.3);
+        .notification-item:hover {
+            transform: translateX(-5px);
+            background: rgba(45, 45, 75, 0.7);
         }
 
-        .card-content {
-            color: var(--text-lighter);
-            line-height: 1.6;
-            margin-bottom: 20px;
+        .notification-item.unread {
+            border-left-color: var(--accent);
+            background: rgba(122, 130, 255, 0.05);
         }
 
-        .card-stats {
+        .notification-item.success {
+            border-left-color: var(--success);
+        }
+
+        .notification-item.warning {
+            border-left-color: var(--warning);
+        }
+
+        .notification-header {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
+            align-items: start;
+            margin-bottom: 8px;
         }
 
-        .stat {
-            text-align: center;
-            flex: 1;
-        }
-
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-lighter);
-            margin-top: 5px;
-        }
-
-        /* 🍪 Cookie Banner Styles */
-        .cookie-banner {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 500px;
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 10000;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            animation: slideUp 0.6s ease-out;
-        }
-
-        .cookie-content h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.3rem;
-            color: #ecf0f1;
-        }
-
-        .cookie-content p {
-            margin: 0 0 20px 0;
-            line-height: 1.5;
-            color: #bdc3c7;
+        .notification-title {
+            font-weight: 600;
             font-size: 0.95rem;
         }
 
-        .cookie-buttons {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+        .notification-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
         }
 
-        .cookie-btn {
+        .notification-message {
+            font-size: 0.85rem;
+            color: var(--text-lighter);
+            line-height: 1.4;
+            display: -webkit-box;
+            line-clamp: 2;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Profile Section Styles */
+        .profile-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            margin-top: 25px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .profile-avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 2rem;
+            border: 3px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .profile-email {
+            color: var(--text-lighter);
+            margin-bottom: 10px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .profile-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-lighter);
+        }
+
+        .profile-stat i {
+            color: var(--primary);
+        }
+
+        /* Button Styles */
+        .btn {
             padding: 12px 24px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(122, 130, 255, 0.4);
+        }
+
+        /* Contact Section Styles */
+        .contact-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            margin-top: 25px;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .form-input, .form-textarea {
+            background: rgba(35, 35, 60, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-light);
             font-size: 0.9rem;
-            transition: all 0.3s ease;
-            flex: 1;
-            min-width: 120px;
+            transition: var(--transition);
+            font-family: inherit;
         }
 
-        .cookie-btn.accept {
-            background: #27ae60;
-            color: white;
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(122, 130, 255, 0.2);
         }
 
-        .cookie-btn.accept:hover {
-            background: #219a52;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
         }
 
-        .cookie-btn.reject {
-            background: #e74c3c;
-            color: white;
+        /* About Section Styles */
+        .about-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            margin-top: 25px;
         }
 
-        .cookie-btn.reject:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        .about-content {
+            line-height: 1.6;
+            color: var(--text-lighter);
         }
 
-        .cookie-btn.settings {
-            background: #3498db;
-            color: white;
+        .about-content p {
+            margin-bottom: 15px;
         }
 
-        .cookie-btn.settings:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
+        /* Notification Dropdown Styles */
+        .notification-dropdown {
+            position: fixed;
+            top: 80px;
+            right: 30px;
+            width: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+            background: var(--bg-darker);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-hover);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
         }
 
-        /* 🔔 Notification */
-        .cookie-notification {
+        .notification-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--bg-darker);
+            z-index: 1;
+        }
+
+        .dropdown-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .mark-read-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .mark-read-btn:hover {
+            color: var(--secondary);
+            background: rgba(122, 130, 255, 0.1);
+        }
+
+        /* Notification Toast Styles */
+        .notification-toast {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #27ae60;
+            background: var(--primary);
             color: white;
             padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            z-index: 10001;
-            animation: fadeIn 0.5s ease;
-            font-weight: 600;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            max-width: 300px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* 🎬 Animations */
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(100px);
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        .notification-toast.success {
+            background: var(--success);
+        }
+
+        .notification-toast.error {
+            background: var(--danger);
+        }
+
+        .notification-toast.warning {
+            background: var(--warning);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
             }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
+            
+            .notification-dropdown {
+                width: 350px;
+                right: 15px;
             }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 📱 Responsive */
         @media (max-width: 768px) {
-            .cookie-banner {
-                width: 95%;
-                bottom: 10px;
+            .navbar {
+                padding: 15px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .nav-menu {
+                order: 3;
+                width: 100%;
+                margin: 10px 0 0 0;
+                justify-content: center;
+                gap: 10px;
+                overflow-x: auto;
+                padding: 10px 0;
+            }
+            
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+                white-space: nowrap;
+            }
+            
+            .user-menu {
+                margin-left: auto;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .container {
                 padding: 15px;
             }
-
-            .cookie-buttons {
-                flex-direction: column;
+            
+            .welcome-section {
+                padding: 25px;
             }
-
-            .cookie-btn {
-                width: 100%;
+            
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .notification-dropdown {
+                width: 300px;
+                right: 10px;
+                left: 10px;
+                top: 70px;
+                margin: 0 auto;
             }
         }
 
-        /* 🚫 Hide when not needed */
-        .cookie-hidden {
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-menu {
+                gap: 8px;
+            }
+            
+            .user-details {
+                display: none;
+            }
+            
+            .notification-dropdown {
+                width: calc(100% - 20px);
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
             display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--primary-dark), var(--secondary-dark));
         }
     </style>
 </head>
 <body>
-    <!-- 🔄 Loading Screen -->
+    <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-spinner"></div>
-        <div class="loading-text">Loading Wailand Security System...</div>
+        <div style="color: var(--text-lighter); font-size: 1.1rem;">Loading Wailand...</div>
     </div>
 
-    <!-- 🧭 Navigation Bar -->
-    <nav class="navbar" id="navbar">
-        <a href="#" class="logo">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="/home" class="logo">
             <i class="fas fa-shield-alt logo-icon"></i>
             <span class="logo-text">Wailand</span>
         </a>
         
-        <div class="nav-links" id="navLinks">
-            <a href="#" class="nav-link active" data-section="dashboard">
-                <i class="fas fa-th-large"></i>
-                Overview
-            </a>
-            <a href="#" class="nav-link" data-section="security">
-                <i class="fas fa-shield-alt"></i>
-                Security
-            </a>
-            <a href="#" class="nav-link" data-section="tools">
-                <i class="fas fa-tools"></i>
-                Tools
-            </a>
-            <a href="#" class="nav-link" data-section="users">
-                <i class="fas fa-users"></i>
-                Users
-            </a>
-            <a href="#" class="nav-link" data-section="notifications">
-                <i class="fas fa-bell"></i>
-                Notifications
-                <span class="nav-badge" id="notificationBadge">3</span>
-            </a>
-            <a href="#" class="nav-link" data-section="profile">
-                <i class="fas fa-user"></i>
-                Profile
-            </a>
+        <!-- Navigation Menu -->
+        <div class="nav-menu">
+            <a href="#dashboard" class="nav-link active" data-section="dashboard">Dashboard</a>
+            <a href="#profile" class="nav-link" data-section="profile">Profile</a>
+            <a href="#tools" class="nav-link" data-section="tools">Tools</a>
+            <a href="#contact" class="nav-link" data-section="contact">Contact</a>
+            <a href="#about" class="nav-link" data-section="about">About</a>
         </div>
         
+        <!-- User Menu -->
         <div class="user-menu">
-            <div class="notification-bell" id="notificationBell">
+            <div class="notification-bell" id="notificationBell" aria-label="Notifications">
                 <i class="fas fa-bell"></i>
-                <span class="notification-badge" id="notificationCount">3</span>
+                <span class="notification-badge" id="notificationCount" aria-live="polite">0</span>
             </div>
             
-            <div class="user-info" id="userInfo">
-                <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-info" id="userInfo" aria-label="User menu" role="button" tabindex="0">
+                <div class="user-avatar" id="userAvatar" aria-hidden="true">U</div>
                 <div class="user-details">
-                    <div class="user-name" id="userName">User Name</div>
+                    <div class="user-name" id="userName">Loading...</div>
                     <div class="user-role" id="userRole">User</div>
                 </div>
             </div>
             
-            <button class="logout-btn" id="logoutBtn">
+            <button class="logout-btn" id="logoutBtn" aria-label="Logout">
                 <i class="fas fa-sign-out-alt"></i>
-                Logout
+                <span class="logout-text">Logout</span>
             </button>
         </div>
     </nav>
 
-    <!-- 📦 Main Container -->
+    <!-- Notification Dropdown -->
+    <div class="notification-dropdown" id="notificationDropdown" aria-label="Notifications dropdown">
+        <div class="dropdown-header">
+            <div class="dropdown-title">Notifications</div>
+            <button class="mark-read-btn" id="markAllRead" aria-label="Mark all notifications as read">
+                Mark all as read
+            </button>
+        </div>
+        <div class="notifications-list" id="dropdownNotificationsList"></div>
+    </div>
+
+    <!-- Main Content Container -->
     <div class="container">
-        <!-- 🏠 Dashboard Section -->
-        <section class="section active" id="dashboardSection">
-            <!-- Welcome Section -->
-            <div class="welcome-section">
-                <div class="welcome-content">
-                    <h1 class="welcome-title" id="welcomeMessage">Welcome back, User!</h1>
-                    <p class="welcome-subtitle">Your security systems are running at peak performance. Here's an overview of your security status and recent activities.</p>
-                    
-                    <div class="welcome-stats">
-                        <div class="welcome-stat">
-                            <div class="stat-value" id="totalScans">0</div>
-                            <div class="stat-label">Security Scans Today</div>
+        <!-- Welcome Section -->
+        <section class="welcome-section" id="dashboardSection" role="region" aria-labelledby="dashboardHeading">
+            <div class="welcome-content">
+                <h1 class="welcome-title" id="welcomeMessage" id="dashboardHeading">Welcome back!</h1>
+                <p class="welcome-subtitle">Your security dashboard is ready. All systems are operational and monitoring your security status.</p>
+                
+                <!-- Statistics Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card" role="article" aria-label="Total scans">
+                        <div class="stat-value" id="totalScans" aria-live="polite">0</div>
+                        <div class="stat-label">Total Scans</div>
+                    </div>
+                    <div class="stat-card" role="article" aria-label="Threats blocked">
+                        <div class="stat-value" id="threatsBlocked" aria-live="polite">0</div>
+                        <div class="stat-label">Threats Blocked</div>
+                    </div>
+                    <div class="stat-card" role="article" aria-label="System health">
+                        <div class="stat-value" id="systemHealth" aria-live="polite">0%</div>
+                        <div class="stat-label">System Health</div>
+                    </div>
+                    <div class="stat-card" role="article" aria-label="Active tools">
+                        <div class="stat-value" id="activeTools" aria-live="polite">0</div>
+                        <div class="stat-label">Active Tools</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Tools Section -->
+            <section class="tools-section" id="toolsSection" role="region" aria-labelledby="toolsHeading">
+                <div class="section-header">
+                    <h2 class="section-title" id="toolsHeading">Security Tools</h2>
+                    <button class="btn btn-primary" id="refreshToolsBtn" aria-label="Refresh tools list">
+                        <i class="fas fa-sync-alt"></i> <span class="btn-text">Refresh</span>
+                    </button>
+                </div>
+                <div class="tools-list" id="toolsList" role="list" aria-label="List of security tools"></div>
+            </section>
+
+            <!-- Notifications Panel -->
+            <section class="notifications-panel" id="activityPanel" role="region" aria-labelledby="activityHeading">
+                <div class="section-header">
+                    <h2 class="section-title" id="activityHeading">Recent Activity</h2>
+                </div>
+                <div class="notifications-list" id="notificationsList" role="list" aria-label="Recent activity notifications"></div>
+            </section>
+        </div>
+
+        <!-- Profile Section -->
+        <section class="profile-section" id="profileSection" role="region" aria-labelledby="profileHeading">
+            <div class="section-header">
+                <h2 class="section-title" id="profileHeading">Profile Information</h2>
+            </div>
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profileAvatar" aria-hidden="true">U</div>
+                <div class="profile-info">
+                    <div class="profile-name" id="profileName">User Name</div>
+                    <div class="profile-email" id="profileEmail">user@email.com</div>
+                    <div class="profile-stats">
+                        <div class="profile-stat" aria-label="Days active">
+                            <i class="fas fa-calendar"></i>
+                            <span id="daysActive">0 days active</span>
                         </div>
-                        <div class="welcome-stat">
-                            <div class="stat-value" id="threatsBlocked">0</div>
-                            <div class="stat-label">Threats Blocked</div>
+                        <div class="profile-stat" aria-label="Total scans">
+                            <i class="fas fa-shield-alt"></i>
+                            <span id="totalScansProfile">0 scans</span>
                         </div>
-                        <div class="welcome-stat">
-                            <div class="stat-value" id="systemHealth">0%</div>
-                            <div class="stat-label">System Health</div>
-                        </div>
-                        <div class="welcome-stat">
-                            <div class="stat-value" id="activeTools">0</div>
-                            <div class="stat-label">Active Tools</div>
+                        <div class="profile-stat" aria-label="Tools used">
+                            <i class="fas fa-tools"></i>
+                            <span id="toolsUsed">0 tools used</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- 📊 Dashboard Grid -->
-            <div class="dashboard-grid" id="dashboardGrid">
-                <!-- Cards will be populated by JavaScript -->
+        <!-- Contact Section -->
+        <section class="contact-section" id="contactSection" role="region" aria-labelledby="contactHeading">
+            <div class="section-header">
+                <h2 class="section-title" id="contactHeading">Contact Us</h2>
+            </div>
+            <form class="contact-form" id="contactForm" aria-label="Contact form">
+                <div class="form-group">
+                    <label class="form-label" for="contactName">Name</label>
+                    <input type="text" id="contactName" class="form-input" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="contactEmail">Email</label>
+                    <input type="email" id="contactEmail" class="form-input" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="contactSubject">Subject</label>
+                    <input type="text" id="contactSubject" class="form-input" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="contactMessage">Message</label>
+                    <textarea id="contactMessage" class="form-textarea" required aria-required="true"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" aria-label="Send message">
+                    <i class="fas fa-paper-plane"></i> <span class="btn-text">Send Message</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section" id="aboutSection" role="region" aria-labelledby="aboutHeading">
+            <div class="section-header">
+                <h2 class="section-title" id="aboutHeading">About Wailand</h2>
+            </div>
+            <div class="about-content">
+                <p>Wailand is a comprehensive security platform designed to protect your digital assets and provide real-time monitoring of your security status.</p>
+                <p>Our mission is to make enterprise-level security accessible to everyone, with intuitive tools and comprehensive protection.</p>
+                <p>With features like vulnerability scanning, threat detection, and real-time monitoring, Wailand ensures your systems stay secure 24/7.</p>
             </div>
         </section>
-    <a class="ai-assistant-btn pulse" onclick="openAIAssistant()" title="Open AI Assistant" href="/public/ai-assistant.html">
-        <i class="fas fa-robot"></i>
-    </a>
-    </div>
-
-    <!-- 🍪 Cookie Banner -->
-    <div class="cookie-banner cookie-hidden" id="cookieBanner">
-        <div class="cookie-content">
-            <h3>🍪 We Use Cookies</h3>
-            <p>We use cookies to improve your experience on our website. By continuing to browse, you agree to our use of cookies.</p>
-            <div class="cookie-buttons">
-                <button class="cookie-btn accept" onclick="CookieManager.acceptAll()">Accept All</button>
-                <button class="cookie-btn reject" onclick="CookieManager.rejectNonEssential()">Reject Non-Essential</button>
-                <button class="cookie-btn settings" onclick="CookieManager.showSettings()">Cookie Settings</button>
-            </div>
-        </div>
     </div>
 
     <script>
-        // =============================================
-        // 🍪 COOKIE MANAGER CLASS
-        // =============================================
-        class CookieManager {
-            static init() {
-                console.log("🍪 [CookieManager] Initializing cookie manager...");
+        // Global variables
+        let currentUser = null;
+        let dashboardData = null;
+        let tools = [];
+        let notifications = [];
+        let token = localStorage.getItem('wailand_token');
+        let autoRefreshInterval = null;
+
+        /**
+         * Initialize the application
+         */
+        async function init() {
+            console.log('🚀 Initializing Wailand Dashboard...');
+
+                // Load all data in parallel
+                await Promise.all([
+                    loadUserData(),
+                    loadDashboardData(),
+                    loadTools(),
+                    loadNotifications()
+                ]);
+
+                // Update UI
+                updateUI();
                 
-                // Check if user already made a choice
-                if (this.getCookie('cookie_consent')) {
-                    console.log("🍪 [CookieManager] User already made cookie choice:", this.getCookie('cookie_consent'));
-                    return;
-                }
-
-                // Show banner after delay
-                setTimeout(() => {
-                    this.showBanner();
-                    console.log("🍪 [CookieManager] Cookie banner displayed");
-                }, 2000);
+                // Setup event listeners
+                setupEventListeners();
+                
+                // Hide loading screen
+                hideLoading();
+                
+                // Start auto-refresh
+                startAutoRefresh();
+                
+                console.log('✅ Wailand Dashboard initialized successfully');
+                
+            } 
+            try {
+                console.warn('🔐 No token found, redirecting to login');
+                redirectToLogin();
+            }
+            catch (error) {
+                console.error('❌ Failed to initialize dashboard:', error);
+                showNotification('Failed to load dashboard data', 'error');
+                hideLoading();
             }
 
-            static showBanner() {
-                const banner = document.getElementById('cookieBanner');
-                if (banner) {
-                    banner.classList.remove('cookie-hidden');
-                    console.log("🍪 [CookieManager] Banner shown to user");
-                }
-            }
+        /**
+         * Load current user data from API
+         */
+        async function loadUserData() {
+            console.log('📝 Loading user data...');
 
-            static hideBanner() {
-                const banner = document.getElementById('cookieBanner');
-                if (banner) {
-                    banner.classList.add('cookie-hidden');
-                    console.log("🍪 [CookieManager] Banner hidden");
-                }
-            }
-
-            static setCookie(name, value, days = 365) {
-                console.log(`🍪 [CookieManager] Setting cookie: ${name}=${value}`);
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                const expires = "expires=" + date.toUTCString();
-                document.cookie = `${name}=${value}; ${expires}; path=/; SameSite=Lax`;
-            }
-
-            static getCookie(name) {
-                const cookies = document.cookie.split(';');
-                for (let cookie of cookies) {
-                    const [cookieName, cookieValue] = cookie.trim().split('=');
-                    if (cookieName === name) {
-                        console.log(`🍪 [CookieManager] Retrieved cookie: ${name}=${cookieValue}`);
-                        return cookieValue;
+            try {
+                const response = await fetch('/api/user', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.warn('🔐 Unauthorized, redirecting to login');
+                        redirectToLogin();
+                        return null;
+                    }
+                    throw new Error(`Server error: ${response.status}`);
                 }
-                console.log(`🍪 [CookieManager] Cookie not found: ${name}`);
+
+                const data = await response.json();
+                
+                // Store user data
+                currentUser = data.data || data;
+                console.log('✅ User data loaded:', currentUser);
+                
+                return currentUser;
+
+            } catch (error) {
+                console.error('⚠️ Error loading user data:', error.message);
+                showNotification('Failed to load user data', 'error');
                 return null;
             }
+        }
 
-            static acceptAll() {
-                console.log("✅ [CookieManager] User accepted all cookies");
-                this.setCookie('cookie_consent', 'accepted');
-                this.setCookie('analytics', 'true');
-                this.setCookie('marketing', 'true');
-                this.setCookie('preferences', 'true');
-                
-                this.hideBanner();
-                this.showNotification('All cookies accepted! Thank you 🍪');
-                this.enableAllServices();
-            }
-
-            static rejectNonEssential() {
-                console.log("❌ [CookieManager] User rejected non-essential cookies");
-                this.setCookie('cookie_consent', 'necessary');
-                this.setCookie('analytics', 'false');
-                this.setCookie('marketing', 'false');
-                this.setCookie('preferences', 'false');
-                
-                this.hideBanner();
-                this.showNotification('Non-essential cookies rejected ✅');
-                this.enableEssentialOnly();
-            }
-
-            static showSettings() {
-                console.log("⚙️ [CookieManager] Showing cookie settings");
-                const settings = `
-Current Cookie Settings:
-
-🔵 Essential Cookies: Required for website functionality (cannot be disabled)
-
-📊 Analytics Cookies: ${this.getCookie('analytics') === 'true' ? '✅ Enabled' : '❌ Disabled'}
-📢 Marketing Cookies: ${this.getCookie('marketing') === 'true' ? '✅ Enabled' : '❌ Disabled'}
-⚙️ Preference Cookies: ${this.getCookie('preferences') === 'true' ? '✅ Enabled' : '❌ Disabled'}
-
-To change settings, clear cookies and reload the page.
-                `;
-                alert(settings);
-            }
-
-            static showNotification(message) {
-                console.log("🔔 [CookieManager] Showing notification:", message);
-                
-                // Remove any existing notifications
-                const existingNotification = document.querySelector('.cookie-notification');
-                if (existingNotification) {
-                    existingNotification.remove();
-                }
-
-                // Create new notification
-                const notification = document.createElement('div');
-                notification.className = 'cookie-notification';
-                notification.textContent = message;
-                document.body.appendChild(notification);
-
-                // Remove notification after 4 seconds
-                setTimeout(() => {
-                    notification.remove();
-                    console.log("🔔 [CookieManager] Notification removed");
-                }, 4000);
-            }
-
-            static enableEssentialOnly() {
-                console.log("🔵 [CookieManager] Enabling essential services only");
-                // Essential website functionality
-            }
-
-            static enableAllServices() {
-                console.log("🎯 [CookieManager] Enabling all services");
-                if (this.getCookie('analytics') === 'true') {
-                    console.log("📊 [CookieManager] Enabling analytics services");
-                    // Google Analytics code would go here
-                }
-                if (this.getCookie('marketing') === 'true') {
-                    console.log("📢 [CookieManager] Enabling marketing services");
-                    // Facebook Pixel code would go here
-                }
-            }
-
-            static showAllCookies() {
-                console.log("🍪 [CookieManager] All current cookies:");
-                document.cookie.split(';').forEach(cookie => {
-                    console.log('  ', cookie.trim());
+        /**
+         * Load dashboard statistics data
+         */
+        async function loadDashboardData() {
+            console.log('📊 Loading dashboard data...');
+            try {
+                const response = await fetch('/api/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
                 });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.warn('🔐 Unauthorized, redirecting to login');
+                        redirectToLogin();
+                        return null;
+                    }
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    dashboardData = data.data || data;
+                    console.log('✅ Dashboard data loaded:', dashboardData);
+                } else {
+                    console.warn('⚠️ Dashboard data not loaded successfully:', data.message);
+                    dashboardData = {
+                        totalScans: 0,
+                        threatsBlocked: 0,
+                        systemHealth: 0,
+                        activeTools: 0,
+                        daysActive: 0
+                    };
+                }
+            } catch (error) {
+                console.error('❌ Error loading dashboard data:', error);
+                // Fallback data
+                dashboardData = {
+                    totalScans: 0,
+                    threatsBlocked: 0,
+                    systemHealth: 0,
+                    activeTools: 0,
+                    daysActive: 0
+                };
             }
         }
 
-        // =============================================
-        // 🚀 APPLICATION MANAGER CLASS
-        // =============================================
-        class AppManager {
-            static currentUser = {};
-            static dashboardData = {};
-            static isInitialized = false;
-
-            static async initialize() {
-                console.log("🚀 [AppManager] Starting application initialization...");
-                
-                if (this.isInitialized) {
-                    console.warn("⚠️ [AppManager] App already initialized, skipping...");
-                    return;
-                }
-
-                try {
-                    // Initialize cookie manager first
-                    CookieManager.init();
-                    console.log("✅ [AppManager] Cookie manager initialized");
-
-                    // Load user data
-                    await this.loadUserData();
-                    console.log("✅ [AppManager] User data loaded");
-
-                    // Load dashboard data
-                    await this.loadDashboardData();
-                    console.log("✅ [AppManager] Dashboard data loaded");
-
-                    // Setup event listeners
-                    this.setupEventListeners();
-                    console.log("✅ [AppManager] Event listeners setup");
-
-                    // Update UI
-                    this.updateUI();
-                    console.log("✅ [AppManager] UI updated");
-
-                    // Hide loading screen
-                    this.hideLoadingScreen();
-                    console.log("✅ [AppManager] Loading screen hidden");
-
-                    this.isInitialized = true;
-                    console.log("🎉 [AppManager] Application fully initialized!");
-
-                } catch (error) {
-                    console.error("❌ [AppManager] Initialization failed:", error);
-                    this.showError("Failed to initialize application");
-                }
-            }
-
-            static async loadUserData() {
-                console.log("👤 [AppManager] Loading user data...");
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                this.currentUser = {
-                    id: 1,
-                    name: 'Alex Johnson',
-                    email: 'alex.johnson@wailand.com',
-                    role: 'Administrator',
-                    avatar: 'A'
-                };
-                console.log("👤 [AppManager] User data loaded:", this.currentUser.name);
-            }
-
-            static async loadDashboardData() {
-                console.log("📊 [AppManager] Loading dashboard data...");
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 800));
-                
-                this.dashboardData = {
-                    totalScans: this.randomInt(150, 300),
-                    threatsBlocked: this.randomInt(20, 50),
-                    systemHealth: this.randomInt(85, 99),
-                    activeTools: this.randomInt(5, 12),
-                    securityScore: this.randomInt(80, 95)
-                };
-                console.log("📊 [AppManager] Dashboard data loaded:", this.dashboardData);
-            }
-
-            static setupEventListeners() {
-                console.log("🎯 [AppManager] Setting up event listeners...");
-                
-                // Navigation links
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const section = e.target.closest('.nav-link').getAttribute('data-section');
-                        console.log(`🧭 [AppManager] Navigation clicked: ${section}`);
-                        this.switchSection(section);
-                    });
-                });
-
-                // Logout button
-                document.getElementById('logoutBtn').addEventListener('click', () => {
-                    console.log("🚪 [AppManager] Logout initiated");
-                    this.logout();
-                });
-
-                // Notification bell
-                document.getElementById('notificationBell').addEventListener('click', () => {
-                    console.log("🔔 [AppManager] Notification bell clicked");
-                    this.switchSection('notifications');
-                });
-
-                // Navbar scroll effect
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 50) {
-                        document.getElementById('navbar').classList.add('scrolled');
-                    } else {
-                        document.getElementById('navbar').classList.remove('scrolled');
+        /**
+         * Load security tools data
+         */
+        async function loadTools() {
+            console.log('🛠️ Loading tools data...');
+            try {
+                const response = await fetch('/api/tools', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
                 });
-
-                console.log("✅ [AppManager] All event listeners registered");
-            }
-
-            static updateUI() {
-                console.log("🎨 [AppManager] Updating UI...");
                 
-                // Update user info
-                document.getElementById('userAvatar').textContent = this.currentUser.avatar;
-                document.getElementById('userName').textContent = this.currentUser.name;
-                document.getElementById('userRole').textContent = this.currentUser.role;
-                document.getElementById('welcomeMessage').textContent = `Welcome back, ${this.currentUser.name.split(' ')[0]}!`;
-
-                // Update dashboard stats
-                document.getElementById('totalScans').textContent = this.dashboardData.totalScans;
-                document.getElementById('threatsBlocked').textContent = this.dashboardData.threatsBlocked;
-                document.getElementById('systemHealth').textContent = `${this.dashboardData.systemHealth}%`;
-                document.getElementById('activeTools').textContent = this.dashboardData.activeTools;
-
-                // Render dashboard cards
-                this.renderDashboardCards();
-                
-                console.log("✅ [AppManager] UI update completed");
-            }
-
-            static renderDashboardCards() {
-                console.log("🃏 [AppManager] Rendering dashboard cards...");
-                const dashboardGrid = document.getElementById('dashboardGrid');
-                
-                const cards = [
-                    {
-                        title: 'Security Status',
-                        content: `Your systems are <strong style="color: #2ed573;">secure</strong>. Security score: ${this.dashboardData.securityScore}%`,
-                        icon: 'fas fa-shield-alt',
-                        stats: [
-                            { value: `${this.dashboardData.securityScore}%`, label: 'Security Score' },
-                            { value: `${this.dashboardData.systemHealth}%`, label: 'System Health' }
-                        ]
-                    },
-                    {
-                        title: 'Threat Detection',
-                        content: `<strong>${this.dashboardData.threatsBlocked}</strong> threats blocked in the last 24 hours.`,
-                        icon: 'fas fa-radar',
-                        stats: [
-                            { value: this.dashboardData.totalScans, label: 'Total Scans' },
-                            { value: '0', label: 'Active Threats' }
-                        ]
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.warn('🔐 Unauthorized, redirecting to login');
+                        redirectToLogin();
+                        return null;
                     }
-                ];
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    tools = data.data || [];
+                    console.log('✅ Tools data loaded:', tools.length + ' tools');
+                } else {
+                    console.warn('⚠️ Tools data not loaded successfully');
+                    tools = [];
+                }
+            } catch (error) {
+                console.error('❌ Error loading tools:', error);
+                tools = [];
+            }
+        }
 
-                dashboardGrid.innerHTML = cards.map(card => `
-                    <div class="dashboard-card">
-                        <div class="card-header">
-                            <div class="card-title-section">
-                                <div class="card-icon">
-                                    <i class="${card.icon}"></i>
-                                </div>
-                                <h3 class="card-title">${card.title}</h3>
-                            </div>
-                            <div class="card-actions">
-                                <button class="card-action-btn">
-                                    <i class="fas fa-sync-alt"></i>
-                                </button>
-                            </div>
+        /**
+         * Load notifications data
+         */
+        async function loadNotifications() {
+            console.log('🔔 Loading notifications...');
+            try {
+                const response = await fetch('/api/notifications?limit=10', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.warn('🔐 Unauthorized, redirecting to login');
+                        redirectToLogin();
+                        return null;
+                    }
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    notifications = data.data || [];
+                    console.log('✅ Notifications loaded:', notifications.length + ' notifications');
+                } else {
+                    console.warn('⚠️ Notifications not loaded successfully');
+                    notifications = [];
+                }
+            } catch (error) {
+                console.error('❌ Error loading notifications:', error);
+                notifications = [];
+            }
+        }
+
+        /**
+         * Update the UI with loaded data
+         */
+        function updateUI() {
+            console.log('🎨 Updating UI with loaded data...');
+            
+            // Update user information
+            if (currentUser) {
+                const avatarText = currentUser.avatar || 
+                                  (currentUser.name ? currentUser.name.substring(0, 1).toUpperCase() : 
+                                   (currentUser.username || 'U').substring(0, 1).toUpperCase());
+                
+                document.getElementById('userName').textContent = currentUser.name || currentUser.username || 'User';
+                document.getElementById('userRole').textContent = currentUser.role || 'User';
+                document.getElementById('userAvatar').textContent = avatarText;
+                document.getElementById('welcomeMessage').textContent = 
+                    `Welcome back, ${currentUser.name ? currentUser.name.split(' ')[0] : currentUser.username || 'User'}!`;
+                
+                document.getElementById('profileName').textContent = currentUser.name || currentUser.username || 'User';
+                document.getElementById('profileEmail').textContent = currentUser.email || 'No email provided';
+                document.getElementById('profileAvatar').textContent = avatarText;
+            }
+
+            // Update dashboard statistics with animation (with null safety)
+            if (dashboardData) {
+                animateValue('totalScans', dashboardData.totalScans || 0);
+                animateValue('threatsBlocked', dashboardData.threatsBlocked || 0);
+                animateValue('systemHealth', dashboardData.systemHealth || 0, '%');
+                animateValue('activeTools', dashboardData.activeTools || 0);
+                
+                // Update profile stats
+                document.getElementById('daysActive').textContent = (dashboardData.daysActive || 0) + ' days active';
+                document.getElementById('totalScansProfile').textContent = (dashboardData.totalScans || 0) + ' scans';
+                document.getElementById('toolsUsed').textContent = (dashboardData.activeTools || 0) + ' tools used';
+            } else {
+                console.warn('⚠️ Dashboard data is null, using default values');
+                animateValue('totalScans', 0);
+                animateValue('threatsBlocked', 0);
+                animateValue('systemHealth', 0, '%');
+                animateValue('activeTools', 0);
+                document.getElementById('daysActive').textContent = '0 days active';
+                document.getElementById('totalScansProfile').textContent = '0 scans';
+                document.getElementById('toolsUsed').textContent = '0 tools used';
+            }
+
+            // Render tools and notifications
+            renderTools();
+            renderNotifications();
+            updateNotificationCount();
+            
+            console.log('✅ UI updated successfully');
+        }
+
+        /**
+         * Animate numeric values
+         */
+        function animateValue(elementId, finalValue, suffix = '') {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            const currentValue = parseFloat(element.textContent) || 0;
+            const duration = 1000;
+            const stepTime = 20;
+            const steps = duration / stepTime;
+            const increment = (finalValue - currentValue) / steps;
+            let currentStep = 0;
+            
+            const timer = setInterval(() => {
+                currentStep++;
+                const newValue = currentValue + (increment * currentStep);
+                
+                if (currentStep >= steps || 
+                    (increment > 0 && newValue >= finalValue) || 
+                    (increment < 0 && newValue <= finalValue)) {
+                    element.textContent = finalValue + suffix;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.round(newValue) + suffix;
+                }
+            }, stepTime);
+        }
+
+        /**
+         * Render security tools in the tools list
+         */
+        function renderTools() {
+            console.log('🎯 Rendering tools list...');
+            const toolsList = document.getElementById('toolsList');
+            
+            if (!tools || tools.length === 0) {
+                toolsList.innerHTML = '<p class="text-center" style="color: var(--text-lighter); padding: 20px;">No tools available</p>';
+                console.log('ℹ️ No tools available to display');
+                return;
+            }
+
+            toolsList.innerHTML = tools.map(tool => `
+                <div class="tool-card" role="button" tabindex="0" 
+                     onclick="runTool(${tool.id})" 
+                     onkeypress="if(event.key === 'Enter') runTool(${tool.id})"
+                     aria-label="Run ${tool.name} tool">
+                    <div class="tool-header">
+                        <div class="tool-icon" aria-hidden="true">
+                            <i class="${tool.icon || 'fas fa-shield-alt'}"></i>
                         </div>
-                        <div class="card-content">${card.content}</div>
-                        <div class="card-stats">
-                            ${card.stats.map(stat => `
-                                <div class="stat">
-                                    <div class="stat-number">${stat.value}</div>
-                                    <div class="stat-label">${stat.label}</div>
-                                </div>
-                            `).join('')}
+                        <div class="tool-info">
+                            <div class="tool-name">${tool.name || 'Unnamed Tool'}</div>
+                            <div class="tool-description">${tool.description || 'Security tool for protection'}</div>
+                        </div>
+                        <div class="tool-status ${tool.status === 'online' ? 'status-online' : 'status-warning'}" 
+                             aria-label="Status: ${tool.status || 'offline'}">
+                            ${tool.status || 'offline'}
                         </div>
                     </div>
-                `).join('');
+                    <div class="usage-bar">
+                        <div class="usage-fill" style="width: ${Math.min(tool.usage || 0, 100)}%" 
+                             aria-label="Usage: ${tool.usage || 0}%"></div>
+                    </div>
+                </div>
+            `).join('');
+            
+            console.log('✅ Tools rendered: ' + tools.length + ' tools displayed');
+        }
 
-                console.log("✅ [AppManager] Dashboard cards rendered");
+        /**
+         * Render notifications in both main panel and dropdown
+         */
+        function renderNotifications() {
+            console.log('🔔 Rendering notifications...');
+            const notificationsList = document.getElementById('notificationsList');
+            const dropdownList = document.getElementById('dropdownNotificationsList');
+            
+            if (!notifications || notifications.length === 0) {
+                const emptyMsg = '<p class="text-center" style="color: var(--text-lighter); padding: 20px;">No notifications</p>';
+                notificationsList.innerHTML = emptyMsg;
+                dropdownList.innerHTML = emptyMsg;
+                console.log('ℹ️ No notifications to display');
+                return;
             }
 
-            static switchSection(sectionId) {
-                console.log(`🔄 [AppManager] Switching to section: ${sectionId}`);
-                
-                // Remove active class from all sections and nav links
-                document.querySelectorAll('.section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                });
+            // Sort notifications by timestamp (newest first)
+            const sortedNotifications = [...notifications].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
 
-                // Add active class to selected section and nav link
-                const sectionElement = document.getElementById(sectionId + 'Section');
-                const navLink = document.querySelector(`[data-section="${sectionId}"]`);
+            const recentNotifications = sortedNotifications.slice(0, 5);
+            
+            const notificationHTML = recentNotifications.map(notification => {
+                const timeAgo = getTimeAgo(notification.timestamp);
+                const unreadClass = notification.read ? '' : 'unread';
+                const typeClass = notification.type || 'info';
                 
-                if (sectionElement) sectionElement.classList.add('active');
-                if (navLink) navLink.classList.add('active');
+                return `
+                    <div class="notification-item ${unreadClass} ${typeClass}" 
+                         role="button" tabindex="0"
+                         onclick="markAsRead('${notification.id}')"
+                         onkeypress="if(event.key === 'Enter') markAsRead('${notification.id}')"
+                         aria-label="${notification.title}, ${notification.message}, ${timeAgo}">
+                        <div class="notification-header">
+                            <div class="notification-title">${notification.title}</div>
+                            <div class="notification-time">${timeAgo}</div>
+                        </div>
+                        <div class="notification-message">${notification.message}</div>
+                    </div>
+                `;
+            }).join('');
 
-                console.log(`✅ [AppManager] Switched to ${sectionId} section`);
+            notificationsList.innerHTML = notificationHTML;
+            dropdownList.innerHTML = sortedNotifications.map(notification => {
+                const timeAgo = getTimeAgo(notification.timestamp);
+                const unreadClass = notification.read ? '' : 'unread';
+                const typeClass = notification.type || 'info';
+                
+                return `
+                    <div class="notification-item ${unreadClass} ${typeClass}" 
+                         role="button" tabindex="0"
+                         onclick="markAsRead('${notification.id}')"
+                         onkeypress="if(event.key === 'Enter') markAsRead('${notification.id}')"
+                         style="margin: 10px;"
+                         aria-label="${notification.title}, ${notification.message}, ${timeAgo}">
+                        <div class="notification-header">
+                            <div class="notification-title">${notification.title}</div>
+                            <div class="notification-time">${timeAgo}</div>
+                        </div>
+                        <div class="notification-message">${notification.message}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            console.log('✅ Notifications rendered: ' + notifications.length + ' total, ' + recentNotifications.length + ' displayed');
+        }
+
+        /**
+         * Update notification badge count
+         */
+        function updateNotificationCount() {
+            const unreadCount = notifications.filter(n => !n.read).length;
+            const badge = document.getElementById('notificationCount');
+            
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount;
+                badge.style.display = 'flex';
+                badge.setAttribute('aria-label', `${unreadCount} unread notifications`);
+                console.log('🔴 Unread notifications: ' + unreadCount);
+            } else {
+                badge.style.display = 'none';
+                badge.setAttribute('aria-label', 'No unread notifications');
+                console.log('🟢 All notifications read');
+            }
+        }
+
+        /**
+         * Convert timestamp to relative time string
+         */
+        function getTimeAgo(timestamp) {
+            if (!timestamp) return 'Recently';
+            
+            const now = new Date();
+            const time = new Date(timestamp);
+            
+            if (isNaN(time.getTime())) return 'Recently';
+            
+            const diffInSeconds = Math.floor((now - time) / 1000);
+
+            if (diffInSeconds < 60) return 'Now';
+            if (diffInSeconds < 3600) {
+                const minutes = Math.floor(diffInSeconds / 60);
+                return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+            }
+            if (diffInSeconds < 86400) {
+                const hours = Math.floor(diffInSeconds / 3600);
+                return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+            }
+            const days = Math.floor(diffInSeconds / 86400);
+            return `${days} day${days !== 1 ? 's' : ''} ago`;
+        }
+
+        /**
+         * Hide loading screen with fade out animation
+         */
+        function hideLoading() {
+            console.log('👋 Hiding loading screen...');
+            const loadingScreen = document.getElementById('loadingScreen');
+            loadingScreen.classList.add('hidden');
+            console.log('✅ Loading screen hidden');
+        }
+
+        /**
+         * Setup all event listeners
+         */
+        function setupEventListeners() {
+            console.log('🎮 Setting up event listeners...');
+            
+            // Notification bell click
+            const notificationBell = document.getElementById('notificationBell');
+            if (notificationBell) {
+                notificationBell.addEventListener('click', (e) => {
+                    console.log('🔔 Notification bell clicked');
+                    e.stopPropagation();
+                    toggleNotificationDropdown();
+                });
             }
 
-            static logout() {
-                console.log("🚪 [AppManager] Starting logout process...");
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('notificationDropdown');
+                if (dropdown && !dropdown.contains(e.target) && !e.target.closest('.notification-bell')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            // Logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', handleLogout);
+            }
+
+            // Mark all as read
+            const markAllReadBtn = document.getElementById('markAllRead');
+            if (markAllReadBtn) {
+                markAllReadBtn.addEventListener('click', handleMarkAllRead);
+            }
+
+            // Contact form submission
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', handleContactSubmit);
+            }
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', handleNavClick);
+            });
+
+            // Refresh tools button
+            const refreshToolsBtn = document.getElementById('refreshToolsBtn');
+            if (refreshToolsBtn) {
+                refreshToolsBtn.addEventListener('click', refreshTools);
+            }
+
+            // Handle Enter key on user info
+            const userInfo = document.getElementById('userInfo');
+            if (userInfo) {
+                userInfo.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        console.log('👤 User info menu opened via keyboard');
+                        // Add user menu functionality here
+                    }
+                });
+            }
+
+            console.log('✅ Event listeners setup complete');
+        }
+
+        /**
+         * Toggle notification dropdown
+         */
+        function toggleNotificationDropdown() {
+            const dropdown = document.getElementById('notificationDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
                 
-                if (confirm('Are you sure you want to logout?')) {
-                    // Simulate logout API call
+                // Focus first notification when dropdown opens
+                if (dropdown.classList.contains('show')) {
                     setTimeout(() => {
-                        console.log("✅ [AppManager] Logout successful");
-                        alert('Logout successful! In a real application, you would be redirected to the login page.');
-                        // window.location.href = '/login';
-                    }, 1000);
-                } else {
-                    console.log("❌ [AppManager] Logout cancelled by user");
+                        const firstNotification = dropdown.querySelector('.notification-item');
+                        if (firstNotification) {
+                            firstNotification.focus();
+                        }
+                    }, 100);
                 }
             }
+        }
 
-            static hideLoadingScreen() {
-                console.log("👋 [AppManager] Hiding loading screen...");
-                const loadingScreen = document.getElementById('loadingScreen');
-                
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    console.log("✅ [AppManager] Loading screen hidden");
+        /**
+         * Handle logout
+         */
+        async function handleLogout() {
+            console.log('🚪 Logout button clicked');
+
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    const response = await fetch('/api/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Logout failed: ${response.status}`);
+                    }
+
+                    console.log('✅ Successfully logged out');
+
+                    // Clear token from storage
+                    localStorage.removeItem('wailand_token');
                     
-                    // Show welcome notification
-                    this.showNotification(
-                        'System Ready', 
-                        `Welcome to Wailand Security System, ${this.currentUser.name.split(' ')[0]}!`, 
-                        'success'
-                    );
-                }, 500);
-            }
+                    // Stop auto-refresh
+                    stopAutoRefresh();
+                    
+                    // Redirect to login page
+                    redirectToLogin();
 
-            static showNotification(title, message, type = 'info') {
-                console.log(`🔔 [AppManager] Showing notification: ${title} - ${message}`);
-                // In a real app, this would show a styled notification
-                console.log(`📢 Notification: ${title} - ${message} (${type})`);
-            }
-
-            static showError(message) {
-                console.error(`❌ [AppManager] Error: ${message}`);
-                this.showNotification('Error', message, 'error');
-            }
-
-            static randomInt(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
+                } catch (error) {
+                    console.error('⚠️ Error during logout:', error.message);
+                    
+                    // Still clear local storage and redirect even if API fails
+                    localStorage.removeItem('wailand_token');
+                    redirectToLogin();
+                }
             }
         }
 
-        // =============================================
-        // 🎬 APPLICATION STARTUP
-        // =============================================
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("📄 [Main] DOM fully loaded and parsed");
-            console.log("🎯 [Main] Starting Wailand Security System...");
+        /**
+         * Handle mark all as read
+         */
+        async function handleMarkAllRead(e) {
+            console.log('📭 Mark all as read clicked');
+            e.stopPropagation();
+            try {
+                const response = await fetch('/api/notifications/mark-all-read', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    await loadNotifications();
+                    updateUI();
+                    showNotification('All notifications marked as read', 'success');
+                    
+                    // Close dropdown
+                    const dropdown = document.getElementById('notificationDropdown');
+                    if (dropdown) {
+                        dropdown.classList.remove('show');
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Error marking all as read:', error);
+                showNotification('Failed to mark all as read', 'error');
+            }
+        }
+
+        /**
+         * Handle contact form submission
+         */
+        async function handleContactSubmit(e) {
+            e.preventDefault();
+            console.log('📧 Contact form submitted');
             
-            // Initialize the application
-            AppManager.initialize().catch(error => {
-                console.error("💥 [Main] Critical application error:", error);
-            });
-        });
-
-        // Global error handler
-        window.addEventListener('error', function(event) {
-            console.error("💥 [Global] Unhandled error:", event.error);
-        });
-
-        window.addEventListener('unhandledrejection', function(event) {
-            console.error("💥 [Global] Unhandled promise rejection:", event.reason);
-        });
-
-        // Connection status monitoring
-        window.addEventListener('online', function() {
-            console.log("🌐 [Network] Connection restored");
-            AppManager.showNotification('Connection Restored', 'You are back online', 'success');
-        });
-
-        window.addEventListener('offline', function() {
-            console.log("🌐 [Network] Connection lost");
-            AppManager.showNotification('Connection Lost', 'Please check your internet connection', 'warning');
-        });
-   function openAIAssistant() {
-            // افتح صفحة الذكاء الاصطناعي في نافذة جديدة
-            const aiPageUrl = '/public/ai-assistant.html'; // اسم صفحتك هنا
-            window.open(aiPageUrl, '_blank', 'width=800,height=600,location=no,menubar=no,toolbar=no');
+            const formData = {
+                name: document.getElementById('contactName').value.trim(),
+                email: document.getElementById('contactEmail').value.trim(),
+                subject: document.getElementById('contactSubject').value.trim(),
+                message: document.getElementById('contactMessage').value.trim()
+            };
+            
+            // Validate form
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                showNotification('Please fill in all fields', 'warning');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                showNotification('Please enter a valid email address', 'warning');
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification('Message sent successfully! We will get back to you soon.', 'success');
+                    document.getElementById('contactForm').reset();
+                } else {
+                    showNotification(`Failed to send message: ${data.message || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                console.error('❌ Error submitting contact form:', error);
+                showNotification('Failed to send message. Please try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
         }
 
-        setInterval(() => {
-            const btn = document.querySelector('.ai-assistant-btn');
-            btn.classList.toggle('pulse');
-        }, 4000);
+        /**
+         * Handle navigation clicks
+         */
+        function handleNavClick(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId + 'Section');
+            
+            if (targetSection) {
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update URL hash without scrolling
+                history.pushState(null, null, `#${targetId}`);
+            }
+        }
+
+        /**
+         * Run a security tool
+         */
+        async function runTool(toolId) {
+            console.log(`🛠️ Running tool ID: ${toolId}`);
+            
+            const tool = tools.find(t => t.id === toolId);
+            if (!tool) {
+                showNotification('Tool not found', 'error');
+                return;
+            }
+            
+            // Check if tool is online
+            if (tool.status !== 'online') {
+                showNotification(`${tool.name} is currently offline`, 'warning');
+                return;
+            }
+            
+            showNotification(`Starting ${tool.name}...`, 'info');
+            
+            try {
+                const response = await fetch(`/api/tools/run/${toolId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    console.log(`✅ Tool ${toolId} executed successfully`);
+                    showNotification(`${tool.name} executed successfully!`, 'success');
+                    
+                    // Refresh data
+                    await Promise.all([
+                        loadTools(),
+                        loadDashboardData(),
+                        loadNotifications()
+                    ]);
+                    updateUI();
+                } else {
+                    console.log(`❌ Tool ${toolId} execution failed: ${data.message}`);
+                    showNotification(`${tool.name} failed: ${data.message || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                console.error(`❌ Error running tool ${toolId}:`, error);
+                showNotification(`Failed to execute ${tool.name}`, 'error');
+            }
+        }
+
+        /**
+         * Mark notification as read
+         */
+        async function markAsRead(notificationId) {
+            console.log(`📖 Marking notification ${notificationId} as read`);
+            try {
+                const response = await fetch(`/api/notifications/${notificationId}/read`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    await loadNotifications();
+                    updateUI();
+                    console.log(`✅ Notification ${notificationId} marked as read`);
+                }
+            } catch (error) {
+                console.error(`❌ Error marking notification as read:`, error);
+            }
+        }
+
+        /**
+         * Refresh tools list
+         */
+        async function refreshTools() {
+            console.log('🔄 Refreshing tools...');
+            const refreshBtn = document.getElementById('refreshToolsBtn');
+            const originalText = refreshBtn.innerHTML;
+            
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
+            refreshBtn.disabled = true;
+            
+            try {
+                await loadTools();
+                renderTools();
+                console.log('✅ Tools refreshed successfully');
+                showNotification('Tools refreshed successfully', 'success');
+            } catch (error) {
+                console.error('❌ Error refreshing tools:', error);
+                showNotification('Failed to refresh tools', 'error');
+            } finally {
+                setTimeout(() => {
+                    refreshBtn.innerHTML = originalText;
+                    refreshBtn.disabled = false;
+                    console.log('🔄 Refresh button reset');
+                }, 1000);
+            }
+        }
+
+        /**
+         * Show notification toast
+         */
+        function showNotification(message, type = 'info') {
+            console.log(`💬 Showing ${type} notification: ${message}`);
+            
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification-toast');
+            existingNotifications.forEach(notif => {
+                notif.classList.remove('show');
+                setTimeout(() => notif.remove(), 300);
+            });
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            notification.setAttribute('role', 'alert');
+            notification.setAttribute('aria-live', 'polite');
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                        type === 'error' ? 'fa-exclamation-circle' : 
+                        type === 'warning' ? 'fa-exclamation-triangle' : 
+                        'fa-info-circle';
+            
+            notification.innerHTML = `
+                <i class="fas ${icon}" aria-hidden="true"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            // Remove after 4 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        /**
+         * Start auto-refresh interval
+         */
+        function startAutoRefresh() {
+            console.log('⏰ Starting auto-refresh (30 seconds interval)');
+            
+            // Clear any existing interval
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            autoRefreshInterval = setInterval(async () => {
+                // Only refresh if page is visible
+                if (!document.hidden) {
+                    console.log('🔄 Auto-refreshing data...');
+                    try {
+                        await Promise.all([
+                            loadDashboardData(),
+                            loadNotifications()
+                        ]);
+                        updateUI();
+                    } catch (error) {
+                        console.error('❌ Auto-refresh failed:', error);
+                    }
+                }
+            }, 30000);
+        }
+
+        /**
+         * Stop auto-refresh interval
+         */
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+                console.log('🛑 Auto-refresh stopped');
+            }
+        }
+        // Handle page visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                console.log('👀 Page became visible, refreshing data');
+                // Refresh data when page becomes visible
+                loadDashboardData();
+                loadNotifications();
+                updateUI();
+            }
+        });
+
+        // Handle page unload
+        window.addEventListener('beforeunload', () => {
+            stopAutoRefresh();
+        });
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
